@@ -1,0 +1,184 @@
+{
+  "version": "1.0",
+  "updated": "2026-10-07",
+  "base_url": "https://github.com/srkkrs77/vololution/raw/main/packages/",
+  "packages": [
+    {
+      "name": "DocLister",
+      "alias": "doclister",
+      "version": "1.4.0",
+      "category": "snippets",
+      "description": "Универсальный вывод документов",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/DocLister",
+      "file": "DocLister.zip",
+      "patched": false
+    },
+    {
+      "name": "FormLister",
+      "alias": "formlister",
+      "version": "1.21.2",
+      "category": "snippets",
+      "description": "Обработка форм",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/FormLister",
+      "file": "FormLister.zip",
+      "patched": false
+    },
+    {
+      "name": "SimpleGallery",
+      "alias": "simplegallery",
+      "version": "1.0.0",
+      "category": "snippets",
+      "description": "Простая галерея изображений",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/SimpleGallery",
+      "file": "SimpleGallery.zip",
+      "patched": false
+    },
+    {
+      "name": "DLSiblings",
+      "alias": "dlsiblings",
+      "version": "1.0.0",
+      "category": "snippets",
+      "description": "Вывод соседних документов (prev/next)",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/DLSiblings",
+      "file": "DLSiblings.zip",
+      "patched": false
+    },
+    {
+      "name": "MonthDate",
+      "alias": "monthdate",
+      "version": "1.2.0",
+      "category": "snippets",
+      "description": "Вывод даты по-русски",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/MonthDate",
+      "file": "MonthDate.zip",
+      "patched": false
+    },
+    {
+      "name": "SimpleTube",
+      "alias": "simpletube",
+      "version": "1.0.0",
+      "category": "snippets",
+      "description": "Видео с YouTube и VK",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/SimpleTube",
+      "file": "SimpleTube.zip",
+      "patched": true
+    },
+    {
+      "name": "MultiTV",
+      "alias": "multitv",
+      "version": "2.0.17",
+      "category": "tvs",
+      "description": "Множественные TV-поля",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/MultiTV",
+      "file": "multiTV.zip",
+      "patched": true
+    },
+    {
+      "name": "FormResults",
+      "alias": "formresults",
+      "version": "1.0.0",
+      "category": "modules",
+      "description": "Результаты форм",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/FormResults",
+      "file": "FormResults.zip",
+      "patched": true
+    },
+    {
+      "name": "editDocs",
+      "alias": "editdocs",
+      "version": "1.0.0",
+      "category": "modules",
+      "description": "Массовое редактирование документов",
+      "author": "Grinyaha",
+      "homepage": "https://github.com/Grinyaha/editDocs",
+      "file": "editDocs.zip",
+      "patched": true
+    },
+    {
+      "name": "evoSearch",
+      "alias": "evosearch",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": "Поиск по сайту",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/evoSearch",
+      "file": "evoSearch.zip",
+      "patched": true
+    },
+    {
+      "name": "EvoBabel",
+      "alias": "evobabel",
+      "version": "0.2.0",
+      "category": "plugins",
+      "description": "Мультиязычность",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/EvoBabel",
+      "file": "evoBabel.zip",
+      "patched": false
+    },
+    {
+      "name": "evoFileManagerDialog",
+      "alias": "evofilemanagerdialog",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": "Диалог файлового менеджера",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/evoFileManagerDialog",
+      "file": "evoFileManagerDialog.zip",
+      "patched": false
+    },
+    {
+      "name": "FirstChildRedirect",
+      "alias": "firstchildredirect",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": "Редирект родителя на первого потомка",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/FirstChildRedirect",
+      "file": "FirstChildRedirect.zip",
+      "patched": false
+    },
+    {
+      "name": "WebP Converter",
+      "alias": "webpconverter",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": "Автоконвертация JPG/PNG в WebP",
+      "author": "Pathologic",
+      "homepage": "",
+      "file": "webP.zip",
+      "patched": false
+    },
+    {
+      "name": "MultiCategories",
+      "alias": "multicategories",
+      "version": "1.0.2",
+      "category": "plugins",
+      "description": "Привязка документа к нескольким категориям",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/MultiCategories",
+      "file": "MultiCategories.zip",
+      "patched": true
+    },
+    {
+      "name": "phpThumb",
+      "alias": "phpthumb",
+      "version": "1.0.0",
+      "category": "lib",
+      "description": "Библиотека генерации превью (не проверялась)",
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/phpThumb",
+      "file": "phpThumb.zip",
+      "patched": false,
+      "status": "unchecked"
+    }
+  ]
+}
