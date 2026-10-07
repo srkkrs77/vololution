@@ -34,8 +34,8 @@
     {
       "name": "SimpleGallery",
       "alias": "simplegallery",
-      "version": "1.0.0",
-      "category": "snippets",
+      "version": "1.2.5",
+      "category": "plugins",
       "description": {
         "ru": "Простая галерея изображений на базе DocLister.",
         "en": "Simple image gallery based on DocLister."
@@ -99,7 +99,8 @@
       "author": "Pathologic",
       "homepage": "https://github.com/Pathologic/MultiTV",
       "file": "multiTV.zip",
-      "patched": true
+      "patched": true,
+      "name_in_modx": "multiTV"
     },
     {
       "name": "FormResults",
@@ -155,7 +156,8 @@
       "author": "Pathologic",
       "homepage": "https://github.com/Pathologic/EvoBabel",
       "file": "evoBabel.zip",
-      "patched": false
+      "patched": false,
+      "name_in_modx": "evoBabel"
     },
     {
       "name": "evoFileManagerDialog",
@@ -175,7 +177,7 @@
       "name": "FirstChildRedirect",
       "alias": "firstchildredirect",
       "version": "1.0.0",
-      "category": "plugins",
+      "category": "snippets",
       "description": {
         "ru": "Редирект родительского документа на первого потомка.",
         "en": "Redirect of parent document to its first child."
@@ -226,7 +228,8 @@
       "homepage": "https://github.com/Pathologic/phpThumb",
       "file": "phpThumb.zip",
       "patched": false,
-      "status": "unchecked"
+      "status": "unchecked",
+      "name_in_modx": "phpthumb"
     }
   ]
 }
