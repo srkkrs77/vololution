@@ -74,6 +74,20 @@
       "patched": false
     },
     {
+      "name": "SimpleTube",
+      "alias": "simpletube",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": {
+        "ru": "Видеогалереи с YouTube, RuTube, VK. Работает на базе DocLister.",
+        "en": "Video galleries with YouTube, RuTube, VK. Works on DocLister."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/SimpleTube",
+      "file": "SimpleTube.zip",
+      "patched": true
+    },
+    {
       "name": "MultiTV",
       "alias": "multitv",
       "version": "2.0.17",
