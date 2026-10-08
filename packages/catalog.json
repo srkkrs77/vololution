@@ -234,7 +234,7 @@
     {
       "name": "seoVolo",
       "alias": "seovolo",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "category": "plugins",
       "description": {
         "ru": "SEO-пакет: мета-теги, Open Graph, Twitter Cards, Schema.org, canonical, hreflang. ⚠️ Обновляет чанк head — сделайте бэкап, если правили его вручную.",
