@@ -281,11 +281,10 @@ INSERT INTO gyl8_system_settings (setting_name, setting_value) VALUES
 ('seo_keywords_enabled', '0'),
 ('seo_hreflang_enabled', '0');
 
-## 7. Что генерируется в HTML
-
+7. Что генерируется в HTML
 Пример вывода на странице «О компании»:
 
-```html
+html
 <title>О компании — Vitamin C Communications</title>
 <meta name="description" content="Агентство стратегических коммуникаций. Позиционирование, Thought Leadership, PR для бизнеса.">
 <link rel="canonical" href="https://site.ru/o-kompanii/">
@@ -338,4 +337,175 @@ INSERT INTO gyl8_system_settings (setting_name, setting_value) VALUES
   ]
 }
 </script>
+Всё это — одна строка [!seoVolo!] в шаблоне.
 
+8. Частые сценарии
+8.1. Главная страница
+seo_title: пусто (авто)
+
+seo_description: заполнить вручную (важная страница)
+
+seo_og_image: своя картинка
+
+seo_schema_type: WebPage
+
+sitemap_priority: 1.0
+
+sitemap_changefreq: weekly
+
+Остальное — по умолчанию
+
+8.2. Статья в блоге
+seo_title: заполнить с ключом
+
+seo_description: заполнить вручную
+
+seo_og_image: картинка статьи
+
+seo_schema_type: Article
+
+sitemap_changefreq: monthly
+
+Остальное — по умолчанию
+
+8.3. Карточка товара
+seo_title: «Купить [Название] — цена, отзывы»
+
+seo_description: короткое описание с ценой
+
+seo_og_image: фото товара
+
+seo_schema_type: Product
+
+sitemap_priority: 0.8
+
+sitemap_changefreq: daily
+
+8.4. Страница «Спасибо за заказ»
+seo_noindex: Noindex + Nofollow
+
+sitemap_exclude: ✅
+
+Остальное — не важно
+
+8.5. Страница «Политика конфиденциальности»
+seo_title: «Политика конфиденциальности — [Site Name]»
+
+seo_description: короткое описание
+
+seo_noindex: Index + Follow (её ищут!)
+
+sitemap_exclude: ✅ (низкий приоритет)
+
+sitemap_priority: 0.1
+
+9. Troubleshooting
+9.1. SEO-теги не выводятся
+Причины:
+
+head.tpl не подключается в шаблоне.
+
+В head.tpl нет вызова [!seoVolo!].
+
+Сниппет seoVolo не создан в БД.
+
+Что проверить:
+
+Открой шаблон → там должен быть [[$head]].
+
+Открой чанк head → там должен быть [!seoVolo!].
+
+Элементы → Сниппеты → seoVolo — существует?
+
+9.2. Вкладка SEO не появляется
+Причина: ManagerManager отключён.
+
+Что делать:
+
+Элементы → Плагины → ManagerManager → Включён.
+
+Обнови страницу документа.
+
+9.3. seo_description не выводится
+Причины:
+
+Поле пустое + нет description / introtext / content — нечего выводить.
+
+Если хочешь принудительно — заполни TV.
+
+9.4. OG Image не показывается в Telegram
+Причины:
+
+Картинка меньше 300×157.
+
+Картинка не по HTTPS.
+
+Telegram закэшировал старое превью.
+
+Картинка вернула 404.
+
+Что делать:
+
+Использовать https://.
+
+Проверить, что URL открывается в браузере.
+
+Через @WebpageBot в Telegram сбросить кэш.
+
+9.5. Schema.org не валидируется
+Что делать:
+
+Открой https://validator.schema.org/
+
+Вставь URL страницы → проверь ошибки.
+
+10. Полезные ссылки
+Валидаторы:
+
+Schema.org: https://validator.schema.org/
+
+Open Graph: https://developers.facebook.com/tools/debug/
+
+Twitter Cards: https://cards-dev.twitter.com/validator
+
+Google Rich Results: https://search.google.com/test/rich-results
+
+Документация:
+
+Open Graph: https://ogp.me/
+
+Schema.org: https://schema.org/
+
+Google SEO: https://developers.google.com/search/docs
+
+Яндекс Вебмастер: https://yandex.ru/support/webmaster/
+
+Наш репозиторий:
+
+https://github.com/srkkrs77/vololution
+
+11. Шпаргалка: что заполнять
+text
+┌─────────────────────────────────────────────────┐
+│  ЕСЛИ НЕ ХОЧЕШЬ ДУМАТЬ                          │
+│  ─────────────────────────────────────────      │
+│  Все поля оставь пустыми.                       │
+│  Работает автоматически.                        │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│  ХОЧЕШЬ SEO НА МАКСИМУМ                         │
+│  ─────────────────────────────────────────      │
+│  1. seo_title — 50-60 символов                  │
+│  2. seo_description — 120-155 символов          │
+│  3. seo_og_image — картинка 1200×630            │
+│  4. seo_schema_type — по типу страницы          │
+│  5. Заполни системные: seo_org_name, logo       │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│  ТЕХНИЧЕСКИЕ СТРАНИЦЫ (спасибо, 404)             │
+│  ─────────────────────────────────────────      │
+│  1. seo_noindex — Noindex + Nofollow            │
+│  2. sitemap_exclude — ✅                        │
+└─────────────────────────────────────────────────┘
