@@ -3,7 +3,7 @@
 **Сборка:** Evolution CMS 1.4.37 (CE)
 **Окружение:** Windows + Laragon, PHP 8.5.10, MySQL 8.0.30, nginx
 **Сайт:** vol.test | БД: vol, префикс gyl8_
-**Последнее обновление манифеста:** 07.10.2026 (после правок Store)
+**Последнее обновление манифеста:** 08.10.2026 (после SEO-пакета)
 **Назначение:** реестр всех правок ядра и пакетов для быстрой сверки при выходе нового релиза CE.
 
 ---
@@ -165,6 +165,58 @@
 
 ---
 
+## SEO-ПАКЕТ seoVolo — собственная разработка
+
+**Не зависит от ядра CE.** Не сломается при обновлении.
+Все правки — в `CHANGELOG.md`, раздел 15.
+
+### Установочные дескрипторы (в дистрибутиве)
+
+**11 TV в `install/assets/tvs/`:**
+- `seo_title.tpl`
+- `seo_description.tpl`
+- `seo_keywords.tpl`
+- `seo_og_image.tpl`
+- `seo_canonical.tpl`
+- `seo_noindex.tpl`
+- `seo_schema_type.tpl`
+- `seo_hreflang.tpl`
+- `sitemap_priority.tpl`
+- `sitemap_changefreq.tpl`
+- `sitemap_exclude.tpl`
+
+**Сниппет:**
+- `install/assets/snippets/seoVolo.tpl`
+
+**Плагин:**
+- `install/assets/plugins/seoVolo.tpl`
+
+**Изменённые чанки:**
+- `install/assets/chunks/head.tpl` — v2.0.0 (вызов `[!seoVolo!]`)
+- `install/assets/chunks/mm_rules.tpl` — v2.0.0 (вкладка SEO + 11 TV)
+
+### Код (в assets/)
+
+**Сниппет:**
+- `assets/snippets/seoVolo/snippet.seoVolo.php`
+
+**Плагин:**
+- `assets/plugins/seoVolo/plugin.seoVolo.php`
+- `assets/plugins/seoVolo/css/seo.css` (отложено)
+- `assets/plugins/seoVolo/js/seo.js` (отложено)
+- `assets/plugins/seoVolo/lang/ru.php`
+- `assets/plugins/seoVolo/lang/en.php`
+
+### Техдолг SEO-пакета
+
+1. Индикатор длины description — отложен, нужен widget TV.
+2. `sitemap_*` TV — создать в `DLSitemap` через параметры сниппета.
+3. Системные настройки `seo_*` — не создаются автоматически.
+4. Schema.org Product — без `seo_sku`, `seo_price`.
+5. Hreflang — требует активного EvoBabel.
+
+---
+
 ## ВНЕШНИЕ ИСТОЧНИКИ — что НЕ трогаем
 
 - RSS-лента релизов CE: `github.com/evocms-community/evolution/releases.atom`
@@ -215,6 +267,7 @@
         Только если CE реально обновил установщик (редко).
 - [ ] 17c. НЕ копировать `docs/`, `packages/`, `CONTEXT.md`, `CHANGELOG.md`,
         `patches-manifest.md` — это наша документация, CE её не касается.
+- [ ] 17d. Проверить, что SEO-пакет (seoVolo) в `install/assets/` не затронут CE.
 
 ### ФАЗА 2 — ТЕСТИРОВАНИЕ (все пункты обязательны)
 
@@ -261,6 +314,18 @@
 - [ ] 53. phpThumb → превью генерируются
 - [ ] 54. DLSiblings → prev/next
 - [ ] 55. MonthDate → дата выводится
+
+**SEO-пакет seoVolo:**
+- [ ] 55a. Вкладка SEO в форме документа
+- [ ] 55b. Все 11 TV на вкладке
+- [ ] 55c. Title генерируется с fallback
+- [ ] 55d. Description с fallback и обрезкой
+- [ ] 55e. Canonical (авто/через TV)
+- [ ] 55f. Open Graph — все теги
+- [ ] 55g. Twitter Cards — все теги
+- [ ] 55h. Schema.org JSON-LD — `@graph`
+- [ ] 55i. robots не выводится при `index, follow`
+- [ ] 55j. hreflang (если включён)
 
 **Фронтенд сайта:**
 - [ ] 56. Главная открывается
