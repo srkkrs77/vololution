@@ -230,6 +230,20 @@
       "patched": false,
       "status": "unchecked",
       "name_in_modx": "phpthumb"
+    },
+    {
+      "name": "seoVolo",
+      "alias": "seovolo",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": {
+        "ru": "SEO-пакет: мета-теги, Open Graph, Twitter Cards, Schema.org, canonical, hreflang. ⚠️ Обновляет чанк head — сделайте бэкап, если правили его вручную.",
+        "en": "SEO package: meta tags, Open Graph, Twitter Cards, Schema.org, canonical, hreflang. ⚠️ Overwrites the head chunk — back it up if you customized it."
+      },
+      "author": "VoloLution CMS",
+      "homepage": "https://github.com/srkkrs77/vololution",
+      "file": "seoVolo.zip",
+      "patched": false
     }
   ]
 }
