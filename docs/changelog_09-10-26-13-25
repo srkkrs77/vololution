@@ -1,0 +1,499 @@
+# 📋 CHANGELOG — VoloLution CMS
+
+**Сборка:** Evolution CMS 1.4.37 (Community Edition)  
+**Цель:** эталонный дистрибутив — ядро + патчи + пакеты  
+**Среда:** Windows + Laragon, PHP 8.5.10, nginx, MySQL 8.0.30  
+**Сайт:** https://vol.test/ | БД: vol, префикс gyl8_  
+**GitHub:** github.com/srkkrs77/vololution
+
+---
+
+## РАЗДЕЛ 1. ПРОПАТЧЕННЫЕ ФАЙЛЫ ЯДРА
+
+| # | Файл | Что сделано |
+|---|---|---|
+| 1 | `manager/includes/protect.inc.php` | Убран `E_STRICT` |
+| 2 | `manager/includes/extenders/dbapi.mysqli.class.inc.php` | `SET SESSION sql_mode='';` + `escape_string($s ?? '')` |
+| 3 | `assets/lib/class.modxRTEbridge.php` | `manager_language ?? 'english'` |
+| 4 | `manager/includes/preload.functions.inc.php` | CSRF-функции + безопасные cookie сессии |
+| 5 | `manager/includes/header.inc.php` | CSRF-мета-тег + JS + базовые `??`-правки |
+| 6 | `manager/includes/accesscontrol.inc.php` | CSRF-проверка POST + whitelist |
+| 7 | `install/config.inc.tpl` | CSRF-функции + `!empty($modx->config['debug'])` |
+| 8 | `manager/includes/config.inc.php` | `!empty($modx->config['debug'])` |
+| 9 | `manager/actions/mutate_content.dynamic.php` | 4 правки `?? 0` / `?? 'none'` |
+| 10 | `assets/plugins/codemirror/codemirror.plugin.php` | 2 правки `?? 0` / `?? 'none'` |
+| 11 | `assets/plugins/managermanager/mm.inc.php` | `datepicker_offset ?? ''` |
+| 12 | `assets/plugins/managermanager/widgets/ddresizeimage/phpthumb.class.php` | `$string{0}` → `$string[0]` |
+| 13 | `assets/plugins/managermanager/widgets/ddresizeimage/phpthumb.functions.php` | `$string{0}` → `$string[0]` |
+
+`manager/index.php` — **не менялся**.
+
+---
+
+## РАЗДЕЛ 2. ПАТЧИ ЯДРА — ПОСТРОЧНО
+
+### 2.1 manager/includes/protect.inc.php
+
+**Строка 6:**
+
+Было:
+```php
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+Стало:
+
+php
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+2.2 manager/includes/extenders/dbapi.mysqli.class.inc.php
+Метод connect(), после query("{$connection_method} {$charset}"):
+
+Было:
+
+php
+$this->conn->query("{$connection_method} {$charset}");
+$tend = $modx->getMicroTime();
+Стало:
+
+php
+$this->conn->query("{$connection_method} {$charset}");
+$this->conn->query("SET SESSION sql_mode='';");
+$tend = $modx->getMicroTime();
+Метод escape(), строка ~129:
+
+Было:
+
+php
+if (!is_array($s)) {
+    return $this->conn->escape_string($s);
+}
+Стало:
+
+php
+if (!is_array($s)) {
+    return $this->conn->escape_string($s ?? '');
+}
+2.3 assets/lib/class.modxRTEbridge.php
+Метод initLang(), строка ~807:
+
+Было:
+
+php
+$lang_name = !empty($_SESSION['mgrUsrConfigSet']['manager_language']) ? $_SESSION['mgrUsrConfigSet']['manager_language'] : $modx->config['manager_language'];
+Стало:
+
+php
+$lang_name = !empty($_SESSION['mgrUsrConfigSet']['manager_language']) ? $_SESSION['mgrUsrConfigSet']['manager_language'] : ($modx->config['manager_language'] ?? 'english');
+2.4 manager/includes/header.inc.php — базовые ??-правки
+Строки 6–8:
+
+Было:
+
+php
+if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) { ... }
+$mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
+Стало:
+
+php
+if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) { ... }
+$modx_manager_charset = $modx_manager_charset ?? 'UTF-8';
+$mxla = $modx_lang_attribute ?? 'en';
+2.5 manager/actions/mutate_content.dynamic.php
+Строка 601: ($modx->config['use_breadcrumbs'] ?? 0)
+Строки 909–910:
+
+php
+$which_editor = $modx->config['which_editor'] ?? 'none';
+$richtexteditorIds[$which_editor][] = 'ta';
+$richtexteditorOptions[$which_editor]['ta'] = '';
+Строка ~918: (($modx->config['which_editor'] ?? 'none') == $editor ? ...)
+Строка ~942: $editor = $modx->config['which_editor'] ?? 'none';
+Строка 1375: if (($modx->config['group_tvs'] ?? 0) > 2 && ...)
+Строка 1383: if(($use_udperms ?? 0) == 1)
+
+2.6 assets/plugins/codemirror/codemirror.plugin.php
+Строка 45:
+
+php
+} elseif (($modx->config['manager_theme_mode'] ?? 0) == 3 || ($modx->config['manager_theme_mode'] ?? 0) == 4) {
+Строка 52:
+
+php
+$srte = ($modx->config['use_editor'] ? ($modx->config['which_editor'] ?? 'none') : 'none');
+2.7 ManagerManager / phpThumb
+mm.inc.php, строка 212: $modx->config['datepicker_offset'] ?? ''
+phpthumb.class.php: $filename{0} → $filename[0] (и аналоги). Удалён недостижимый break;
+phpthumb.functions.php: $string{$i} → $string[$i], $escapeables{$i} → $escapeables[$i]
+
+РАЗДЕЛ 3. CSRF-ЗАЩИТА
+3.1 manager/includes/preload.functions.inc.php
+Метод startCMSSession() — использован массив session_set_cookie_params([...]) с httponly=true, samesite=Lax. Добавлен session_regenerate_id(true) при первом входе.
+csrf_token() — через getCurrentCsrfToken().
+csrf_field() — с htmlspecialchars().
+
+3.2 install/config.inc.tpl — CSRF-функции
+Перед include_once(MODX_MANAGER_PATH . 'includes/preload.functions.inc.php'); добавлен блок CSRF-функций (generateCsrfToken, getCurrentCsrfToken, getRequestCsrfToken, validateCsrfToken, checkCsrfToken, clearCsrfTokens, csrfTokenField, csrfTokenMeta).
+В checkCsrfToken() — !empty($GLOBALS['modx']->config['debug']).
+
+3.3 manager/includes/accesscontrol.inc.php
+Внутри else { ... } после $modx->updateValidatedUserSession(); — CSRF-проверка POST с whitelist [8, 67, 112, 118] (logout / remove locks / execute module / settings ajax). Дополнительно исключены core AJAX (updateMsgCount, ajaxa).
+
+3.4 manager/includes/header.inc.php — инъекция токена
+Meta-тег <?= csrfTokenMeta() ?> после <title>. JS-блок перед media/script/main.js — перехват submit, HTMLFormElement.prototype.submit, fetch, XMLHttpRequest + MutationObserver.
+
+3.5 manager/includes/config.inc.php и install/config.inc.tpl
+В checkCsrfToken() — !empty($GLOBALS['modx']->config['debug']).
+
+РАЗДЕЛ 4. ПАКЕТЫ С ПРАВКАМИ (6)
+4.1 MultiTV — 10 правок в 2 файлах
+assets/tvs/multitv/includes/multitv.class.php — ??-правки (10 мест)
+
+assets/tvs/multitv/settings/default.setting.inc.php — empty($GLOBALS['mtvjquery'])
+
+4.2 FormResults — 4 правки в 2 файлах
+core/src/FormResults.php — autoload
+
+core/templates/forms_list.tpl — 3 правки ??
+
+4.3 SimpleTube — 2 правки в 2 файлах
+lib/controller.class.php — 4 правки ??
+
+lib/SimpleTube/simpletube.class.php — 1 правка
+
+4.4 evoSearch — 5 правок в 1 файле
+plugin.class.php — 5 правок ??
+
+4.5 editDocs — 5 групп правок в 2 файлах
+assets/lib/MODxAPI/modResource.php — роли [1, 4]
+
+assets/modules/editdocs/editdocs.class.php — 5 групп
+
+4.6 MultiCategories — 2 правки в 1 файле
+assets/plugins/multicategories/lib/model.php — \Exception, protected $log
+
+РАЗДЕЛ 5. ПАКЕТЫ БЕЗ ПРАВОК (10)
+#	Пакет	Тип
+1	DocLister	сниппет
+2	FormLister	сниппет
+3	SimpleGallery	плагин
+4	EvoBabel	плагин
+5	evoFileManagerDialog	плагин
+6	FirstChildRedirect	сниппет
+7	MonthDate	сниппет
+8	WebP Converter	плагин
+9	DLSiblings	сниппет
+10	phpThumb	библиотека
+РАЗДЕЛ 6. ОКРУЖЕНИЕ
+MySQL: 8.0.30 (Laragon 6 не поддерживает 8.4)
+
+nginx: C:\laragon\etc\nginx\sites-enabled\vol.test.conf
+
+PHP: 8.5.10
+
+Strict mode: предупреждение в installer не блокирует установку
+
+РАЗДЕЛ 7. СТРУКТУРА ПРОЕКТА
+text
+_my_extras/
+├── core/
+├── optional/
+├── custom/
+└── legacy/
+
+_my_patches/
+├── README.md
+└── CHANGELOG.md
+
+GitHub: github.com/srkkrs77/vololution
+├── packages/
+├── extras-module/
+└── dist/
+РАЗДЕЛ 8. ROADMAP
+Этап 1 — SEO + живой поиск
+Этап 3 — Соцслой
+Этап 5 — Магазин
+Этап 6 — Долгосрочные
+Этап 7 — Инфраструктура
+
+РАЗДЕЛ 9. ТЕХДОЛГ
+9.1 CSRF — 4 задачи (A, B, C, D)
+Не изменялся. См. ревизию от 07.10.2026.
+
+9.2 Пакеты
+editdocs.class.php — остались места без ??
+
+save_content.processor.php строка 614 — $use_udperms без ??
+
+РАЗДЕЛ 10. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ (07.10.2026)
+Все 10 тестов — ✅
+
+РАЗДЕЛ 11. ФИЛОСОФИЯ ПРОЕКТА
+text
+Ядро Evolution CMS 1.4.37 (CE)
++ 13 пропатченных файлов ядра
++ CSRF-защита и безопасные сессии
++ 6 пропатченных пакетов
++ 10 проверенных пакетов без правок
++ SEO-пакет seoVolo (собственная разработка)
++ Свой Extras-Store
+= рабочая CMS под PHP 8.5
+РАЗДЕЛ 12. CE-ЭКОСИСТЕМА
+Без изменений.
+
+РАЗДЕЛ 13. СЛЕДУЮЩИЕ ШАГИ (архив)
+Без изменений.
+
+РАЗДЕЛ 14. СВОЙ EXTRAS-STORE — ОТВЯЗКА ОТ EVO.IM
+Без изменений. См. ревизию от 07.10.2026.
+
+Дополнения от 09.10.2026:
+
+Патч assets/modules/store/core.php — удалена строка if (!$objects->getDepth() && $object->isFile()) continue; в copyFolder(). Без этого setup.sql из корня пакета не копируется.
+
+Патч assets/modules/store/installer/instprocessor-fast.php — убран $dbase . '.' из DELETE-запроса (строка ~209). Без этого SQL-ошибка при установке TV.
+
+Патч assets/modules/store/installer/setup.info.php — $params['input_options'] ?? '' (строка 66). Без этого warnings при установке пакетов с TV.
+
+РАЗДЕЛ 15. SEO-ПАКЕТ seoVolo — СВОЯ РАЗРАБОТКА
+15.1. Цель и результат
+SEO-пакет для генерации мета-тегов из коробки. Устанавливается как часть дистрибутива (через install/assets/) и как отдельный пакет через Store.
+
+Что даёт:
+
+<title>, <meta description>, <meta robots>, <meta keywords> (опционально)
+
+Canonical URL — авто или через TV
+
+Open Graph (7 тегов) + Twitter Cards (4–6 тегов)
+
+Schema.org JSON-LD: Organization, WebSite, WebPage, Article/NewsArticle/BlogPosting, Product, Service, FAQPage, BreadcrumbList
+
+Hreflang (включается настройкой, работает с EvoBabel)
+
+11 TV на отдельной вкладке «SEO» в форме документа
+
+Отдельный модуль seoVolo Settings для управления настройками организации
+
+15.2. Состав пакета
+11 TV (install/assets/tvs/):
+seo_title, seo_description, seo_keywords, seo_og_image, seo_canonical, seo_noindex, seo_schema_type, seo_hreflang, sitemap_priority, sitemap_changefreq, sitemap_exclude
+
+Сниппет:
+
+install/assets/snippets/seoVolo.tpl
+
+assets/snippets/seoVolo/snippet.seoVolo.php
+
+Плагин:
+
+install/assets/plugins/seoVolo.tpl — события OnManagerPageInit,OnTempFormSave
+
+assets/plugins/seoVolo/plugin.seoVolo.php — автосоздание настроек + привязка TV
+
+Модуль:
+
+install/assets/modules/seoVolo.tpl
+
+assets/modules/seoVolo/core.php
+
+assets/modules/seoVolo/lang/ru.php, en.php, de.php
+
+Чанки (обновлены):
+
+install/assets/chunks/head.tpl — вызов [!seoVolo!]
+
+install/assets/chunks/mm_rules.tpl — вкладка SEO + 11 TV
+
+15.3. Файлы — создано / изменено
+Новые файлы (22):
+
+11 × install/assets/tvs/*.tpl
+
+install/assets/snippets/seoVolo.tpl
+
+install/assets/plugins/seoVolo.tpl
+
+install/assets/modules/seoVolo.tpl
+
+assets/snippets/seoVolo/snippet.seoVolo.php
+
+assets/plugins/seoVolo/plugin.seoVolo.php
+
+assets/modules/seoVolo/core.php
+
+assets/modules/seoVolo/lang/ru.php
+
+assets/modules/seoVolo/lang/en.php
+
+assets/modules/seoVolo/lang/de.php
+
+Изменённые файлы (2):
+
+install/assets/chunks/head.tpl (v2.0.0)
+
+install/assets/chunks/mm_rules.tpl (v2.0.0)
+
+15.4. Где подключается
+Frontend — в head.tpl:
+
+text
+[!seoVolo!]
+Backend — в форме документа: вкладка SEO (создаётся ManagerManager через mm_rules).
+
+Backend — настройки: Модули → seoVolo Settings.
+
+15.5. Логика fallback
+Title: seo_title → pagetitle — site_name
+Description: seo_description → description → introtext (160) → content (160)
+OG Image: seo_og_image → seo_org_logo → og_default_image → первое изображение из контента
+Canonical: seo_canonical → авто
+Robots: выводится только если ≠ index, follow
+
+15.6. Системные настройки
+Создаются автоматически плагином при первом входе в админку (OnManagerPageInit). Не требуют setup.sql. Всего 11 настроек:
+
+seo_org_name, seo_org_logo, seo_org_phone, seo_org_email, seo_org_address
+
+og_default_image
+
+seo_title_separator, seo_keywords_enabled, seo_hreflang_enabled
+
+seo_twitter_site, seo_twitter_creator
+
+Редактируются через модуль Модули → seoVolo Settings.
+Не показываются в стандартной «Конфигурации» Evo (архитектурное ограничение CE 1.4 — вкладки конфигурации прописаны в PHP-файлах админки, не строятся из БД).
+
+15.7. TV на вкладке SEO
+Создаётся через mm_rules.tpl:
+
+text
+mm_createTab('SEO', 'seo', '', '', '', '');
+mm_moveFieldsToTab('seo_title,seo_description,seo_keywords,seo_og_image,seo_canonical,seo_noindex,seo_schema_type,seo_hreflang,sitemap_priority,sitemap_changefreq,sitemap_exclude', 'seo', '', '');
+mm_widget_tags('seo_keywords', ',');
+Требуется включённый ManagerManager.
+
+15.8. Плагин seoVolo
+События: OnManagerPageInit, OnTempFormSave.
+
+Функции:
+
+seoVolo_ensureSettings() — создаёт 11 настроек, если их нет.
+
+seoVolo_attachTVsToTemplate() — привязывает 11 TV к шаблону при сохранении.
+
+15.9. Модуль seoVolo Settings
+Путь: assets/modules/seoVolo/core.php
+Дескриптор: install/assets/modules/seoVolo.tpl
+
+Функции:
+
+Форма редактирования 11 настроек.
+
+Кнопка Browse для выбора логотипа и OG-картинки через медиабраузер Evo.
+
+Чтение значений напрямую из БД (не из $modx->config) — обход кэша.
+
+После сохранения — сброс assets/cache/siteCache.idx.php.
+
+Мультиязычность: ru, en, de через lang/.
+
+15.10. ОТЛОЖЕНО: индикатор длины description
+Попытки через плагин (OnDocFormPrerender, OnDocFormRender, OnSiteSettingsRender) — не сработали. Правильный путь — виджет TV (Evo @output_widget). Отложено.
+
+Файлы assets/plugins/seoVolo/css/seo.css, js/seo.js, lang/{ru,en}.php — готовы, ждут подключения.
+
+15.11. ТЕХДОЛГ SEO-пакета
+Индикатор длины description — отложен.
+
+sitemap_* TV — создать через параметры DLSitemap.
+
+Schema.org Product — без seo_sku, seo_price.
+
+Hreflang — требует активного EvoBabel.
+
+15.12. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ (09.10.2026)
+Проверено:
+
+✅ Вкладка SEO в форме документа
+
+✅ Все 11 TV
+
+✅ Сниппет генерирует title/description/canonical/OG/Twitter/Schema.org
+
+✅ robots не выводится при index, follow
+
+✅ Модуль seoVolo Settings — форма, сохранение, Browse, языки ru/en/de
+
+✅ Настройки создаются автоматически плагином
+
+✅ PHP error_log — пусто (после патчей install/)
+
+Не проверено:
+
+⬜ Индикатор длины description
+
+⬜ Hreflang на мультиязычном сайте
+
+⬜ Schema.org Article / Product / FAQPage
+
+РАЗДЕЛ 16. ПАТЧИ КОРНЕВОГО INSTALL/
+Правки в установщике самой CMS install/ — отдельный слой от патчей ядра. Обнаружены при установке дистрибутива на чистую БД (09.10.2026).
+
+16.1 install/setup.info.php
+Строка ~168 (блок модулей):
+
+Было:
+
+php
+(int)$params['shareparams'],
+Стало:
+
+php
+(int)($params['shareparams'] ?? 0),
+Строка ~173 (проверка зависимостей):
+
+Было:
+
+php
+if ((int)$params['shareparams'] || !empty($params['dependencies'])) {
+Стало:
+
+php
+if ((int)($params['shareparams'] ?? 0) || !empty($params['dependencies'])) {
+Причина: warning «Undefined array key "shareparams"» при установке модулей без параметра @shareparams.
+
+16.2 install/instprocessor.php
+Строка ~471 (блок Install Chunks):
+
+Было:
+
+php
+$name = mysqli_real_escape_string($conn, $moduleChunk[0]);
+$desc = mysqli_real_escape_string($conn, $moduleChunk[1]);
+$category = mysqli_real_escape_string($conn, $moduleChunk[3]);
+$overwrite = mysqli_real_escape_string($conn, $moduleChunk[4]);
+Стало:
+
+php
+$name = mysqli_real_escape_string($conn, $moduleChunk[0] ?? '');
+$desc = mysqli_real_escape_string($conn, $moduleChunk[1] ?? '');
+$category = mysqli_real_escape_string($conn, $moduleChunk[3] ?? '');
+$overwrite = mysqli_real_escape_string($conn, $moduleChunk[4] ?? '');
+Причина: deprecated warning «Passing null to parameter #2 ($string)» в PHP 8.5.
+
+16.3 Отличие от патчей Store
+Слой	Папка	Назначение
+Корневой install/	install/	Установка самой CMS
+Store installer	assets/modules/store/installer/	Установка пакетов через Store
+Оба инсталлера происходят от одного предка (MODX), отсюда схожие баги. Патчить надо оба комплекта.
+
+РАЗДЕЛ 17. СЛЕДУЮЩИЕ ШАГИ — АКТУАЛЬНО
+Живой поиск (AJAX autocomplete) — Этап 1.2.
+
+CSRF-техдолг — раздел 9.1, 4 задачи.
+
+Индикатор длины description — через виджет TV.
+
+Проверка пакетов через Store — MultiTV, editDocs, FormResults.
+
+patches-manifest.md — синхронизировать с разделами 14, 15, 16.
+
+CONTEXT.md, roadmap.md, docs/seoVolo-guide.md — обновить.
