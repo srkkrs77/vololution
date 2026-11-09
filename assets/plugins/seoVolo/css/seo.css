@@ -1,0 +1,96 @@
+/* ============================================
+   seoVolo — admin styles
+   Индикатор длины description в форме документа
+   ============================================ */
+
+.seovolo-counter {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #f8f9fa;
+    border: 1px solid #e5e8eb;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.2s;
+}
+
+.seovolo-counter .seovolo-count {
+    font-weight: 600;
+    color: #333;
+}
+
+.seovolo-counter .seovolo-status {
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Прогресс-бар */
+.seovolo-bar {
+    margin-top: 4px;
+    height: 4px;
+    background: #e5e8eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.seovolo-bar-fill {
+    height: 100%;
+    width: 0;
+    background: #ccc;
+    transition: width 0.2s, background 0.2s;
+}
+
+/* Состояния */
+.seovolo-state-short .seovolo-status {
+    background: #f8d7da;
+    color: #721c24;
+}
+.seovolo-state-short .seovolo-bar-fill {
+    background: #dc3545;
+}
+
+.seovolo-state-good .seovolo-status {
+    background: #fff3cd;
+    color: #856404;
+}
+.seovolo-state-good .seovolo-bar-fill {
+    background: #ffc107;
+}
+
+.seovolo-state-great .seovolo-status {
+    background: #d4edda;
+    color: #155724;
+}
+.seovolo-state-great .seovolo-bar-fill {
+    background: #28a745;
+}
+
+.seovolo-state-long .seovolo-status {
+    background: #f8d7da;
+    color: #721c24;
+}
+.seovolo-state-long .seovolo-bar-fill {
+    background: #dc3545;
+}
+
+/* Тёмная тема */
+.darkness .seovolo-counter {
+    background: #2a2d33;
+    border-color: #414449;
+    color: #a8b0b8;
+}
+.darkness .seovolo-counter .seovolo-count {
+    color: #e4e6e8;
+}
+.darkness .seovolo-bar {
+    background: #414449;
+}

@@ -1,0 +1,12 @@
+# Evo Cache
+/assets/cache/
+
+# Config (секреты)
+/manager/includes/config.inc.php
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.tmp

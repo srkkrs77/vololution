@@ -1,0 +1,238 @@
+РЕДАКТИРОВАТЬ ФАЙЛ:
+https://github.com/srkkrs77/vololution/blob/main/packages/catalog.json
+
+{
+  "version": "1.0",
+  "updated": "2026-10-07",
+  "base_url": "https://github.com/srkkrs77/vololution/raw/main/packages/",
+  "packages": [
+    {
+      "name": "DocLister",
+      "alias": "doclister",
+      "version": "1.4.0",
+      "category": "snippets",
+      "description": {
+        "ru": "Универсальный вывод документов, товаров, новостей с фильтрацией, сортировкой и пагинацией. Заменяет устаревшие Ditto и CatalogView.",
+        "en": "Universal output of documents, products, news with filtering, sorting, and pagination. Replaces legacy Ditto and CatalogView."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/DocLister",
+      "file": "DocLister.zip",
+      "patched": false
+    },
+    {
+      "name": "FormLister",
+      "alias": "formlister",
+      "version": "1.21.2",
+      "category": "snippets",
+      "description": {
+        "ru": "Создание и обработка любых форм: обратная связь, заказ звонка, регистрация, авторизация, оформление заказа.",
+        "en": "Creation and processing of any forms: feedback, call-back request, registration, authorization, checkout."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/FormLister",
+      "file": "FormLister.zip",
+      "patched": false
+    },
+    {
+      "name": "SimpleGallery",
+      "alias": "simplegallery",
+      "version": "1.2.5",
+      "category": "plugins",
+      "description": {
+        "ru": "Простая галерея изображений на базе DocLister.",
+        "en": "Simple image gallery based on DocLister."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/SimpleGallery",
+      "file": "SimpleGallery.zip",
+      "patched": false
+    },
+    {
+      "name": "DLSiblings",
+      "alias": "dlsiblings",
+      "version": "1.0.0",
+      "category": "snippets",
+      "description": {
+        "ru": "Вывод соседних документов (предыдущий / следующий) на базе DocLister.",
+        "en": "Output of sibling documents (previous / next) based on DocLister."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/DLSiblings",
+      "file": "DLSiblings.zip",
+      "patched": false
+    },
+    {
+      "name": "MonthDate",
+      "alias": "monthdate",
+      "version": "1.2.0",
+      "category": "snippets",
+      "description": {
+        "ru": "Вывод даты по-русски в текстовом формате.",
+        "en": "Output of date in Russian text format."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/MonthDate",
+      "file": "MonthDate.zip",
+      "patched": false
+    },
+    {
+      "name": "SimpleTube",
+      "alias": "simpletube",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": {
+        "ru": "Видеогалереи с YouTube, RuTube, VK. Работает на базе DocLister.",
+        "en": "Video galleries with YouTube, RuTube, VK. Works on DocLister."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/SimpleTube",
+      "file": "SimpleTube.zip",
+      "patched": true
+    },
+    {
+      "name": "MultiTV",
+      "alias": "multitv",
+      "version": "2.0.17",
+      "category": "tvs",
+      "description": {
+        "ru": "Повторяющиеся поля в TV-параметрах: галереи, характеристики товаров, опции, слайдеры.",
+        "en": "Repeatable fields in TV parameters: galleries, product specifications, options, sliders."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/MultiTV",
+      "file": "multiTV.zip",
+      "patched": true,
+      "name_in_modx": "multiTV"
+    },
+    {
+      "name": "FormResults",
+      "alias": "formresults",
+      "version": "1.0.0",
+      "category": "modules",
+      "description": {
+        "ru": "Сохранение отправленных форм в базу данных. Требует FormLister.",
+        "en": "Saving submitted forms to the database. Requires FormLister."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/FormResults",
+      "file": "FormResults.zip",
+      "patched": true
+    },
+    {
+      "name": "editDocs",
+      "alias": "editdocs",
+      "version": "1.0.0",
+      "category": "modules",
+      "description": {
+        "ru": "Массовое редактирование полей БД и TV, импорт / экспорт в Excel.",
+        "en": "Bulk editing of DB fields and TVs, import / export to Excel."
+      },
+      "author": "Grinyaha",
+      "homepage": "https://github.com/Grinyaha/editDocs",
+      "file": "editDocs.zip",
+      "patched": true
+    },
+    {
+      "name": "evoSearch",
+      "alias": "evosearch",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": {
+        "ru": "Поиск по сайту с учётом морфологии русского и английского языков. Требует DocLister.",
+        "en": "Site search with morphology support for Russian and English. Requires DocLister."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/evoSearch",
+      "file": "evoSearch.zip",
+      "patched": true
+    },
+    {
+      "name": "EvoBabel",
+      "alias": "evobabel",
+      "version": "0.2.0",
+      "category": "plugins",
+      "description": {
+        "ru": "Управление мультиязычными сайтами через разные папки в дереве документов.",
+        "en": "Managing multilingual sites via separate folders in the document tree."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/EvoBabel",
+      "file": "evoBabel.zip",
+      "patched": false,
+      "name_in_modx": "evoBabel"
+    },
+    {
+      "name": "evoFileManagerDialog",
+      "alias": "evofilemanagerdialog",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": {
+        "ru": "Открытие файлового менеджера во всплывающем окне вместо нового окна браузера.",
+        "en": "Opening the file manager in a popup window instead of a new browser window."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/evoFileManagerDialog",
+      "file": "evoFileManagerDialog.zip",
+      "patched": false
+    },
+    {
+      "name": "FirstChildRedirect",
+      "alias": "firstchildredirect",
+      "version": "1.0.0",
+      "category": "snippets",
+      "description": {
+        "ru": "Редирект родительского документа на первого потомка.",
+        "en": "Redirect of parent document to its first child."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/FirstChildRedirect",
+      "file": "FirstChildRedirect.zip",
+      "patched": false
+    },
+    {
+      "name": "WebP Converter",
+      "alias": "webpconverter",
+      "version": "1.0.0",
+      "category": "plugins",
+      "description": {
+        "ru": "Автоматическая конвертация JPG и PNG в WebP при выводе страницы.",
+        "en": "Automatic conversion of JPG and PNG to WebP on page output."
+      },
+      "author": "Pathologic",
+      "homepage": "",
+      "file": "webP.zip",
+      "patched": false
+    },
+    {
+      "name": "MultiCategories",
+      "alias": "multicategories",
+      "version": "1.0.2",
+      "category": "plugins",
+      "description": {
+        "ru": "Привязка документа к нескольким категориям. Дополняет штатное дерево.",
+        "en": "Linking a document to multiple categories. Extends the default tree."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/MultiCategories",
+      "file": "MultiCategories.zip",
+      "patched": true
+    },
+    {
+      "name": "phpThumb",
+      "alias": "phpthumb",
+      "version": "1.0.0",
+      "category": "lib",
+      "description": {
+        "ru": "Библиотека генерации превью и изменения размеров изображений на лету с кэшированием. Не проверялась.",
+        "en": "Library for on-the-fly thumbnail generation and image resizing with caching. Not tested."
+      },
+      "author": "Pathologic",
+      "homepage": "https://github.com/Pathologic/phpThumb",
+      "file": "phpThumb.zip",
+      "patched": false,
+      "status": "unchecked",
+      "name_in_modx": "phpthumb"
+    }
+  ]
+}

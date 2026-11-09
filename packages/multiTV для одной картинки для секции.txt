@@ -1,0 +1,42 @@
+<?php
+$settings['display'] = 'datatable';
+
+$settings['fields'] = array(
+    'key' => array(
+        'caption' => 'Ключ',
+        'type'    => 'text'
+    ),
+    'image' => array(
+        'caption' => 'Изображение',
+        'type'    => 'image'
+    ),
+    'alt' => array(
+        'caption' => 'Alt текст',
+        'type'    => 'text'
+    )
+);
+
+$settings['columns'] = array(
+    array(
+        'caption'   => 'Изображение',
+        'fieldname' => 'image',
+        'render'    => '<img src="[+image+]" style="max-height:40px;vertical-align:middle"> &nbsp; <b>[+key+]</b> — [+alt+]'
+    )
+);
+
+$settings['form'] = array(
+    array(
+        'caption' => 'Изображение секции',
+        'content' => array(
+            'key'   => array(),
+            'image' => array(),
+            'alt'   => array()
+        )
+    )
+);
+
+$settings['configuration'] = array(
+    'enablePaste'  => false,
+    'csvseparator' => ',',
+    'maxRows'      => 1
+);

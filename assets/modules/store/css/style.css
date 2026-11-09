@@ -1,0 +1,547 @@
+/* ============================================
+   VoloLution Store — style.css
+   ============================================ */
+
+body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.container-fluid .row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.fa,
+.btn .fa {
+  font-size: 14px;
+}
+
+.pagetitle {
+  margin-left: 10px;
+}
+
+.pagetitle-text .version {
+  font-size: 13px;
+  font-weight: normal;
+  color: #999;
+}
+
+/* --- Тип-бейдж в углу плашки --- */
+.typesbadge {
+  background: #fafafa;
+  font-weight: 700;
+  display: block;
+  position: absolute;
+  min-width: 80px;
+  height: 25px;
+  right: 0;
+  top: 0;
+  padding: 3px 5px;
+  text-align: center;
+  border-radius: 0 0 0 5px;
+  border: 1px solid #dfdfdf;
+  border-width: 0 0 1px 1px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #555;
+  z-index: 2;
+}
+
+/* --- Метка "установлен" --- */
+.curr {
+  margin-left: 6px;
+  background-color: #f1e810;
+  padding: 3px 6px;
+  font-size: 10px;
+  font-style: normal;
+  color: #000;
+}
+
+/* --- Состояния установки --- */
+.pack_old .item-update,
+.pack_alredy .item-reinstall {
+  display: block !important;
+}
+
+.pack_install .item-reinstall,
+.pack_install .item-update {
+  display: none;
+}
+
+.pack_update .item-reinstall,
+.pack_update .item-install {
+  display: none;
+}
+
+.pack_reinstall .item-install,
+.pack_reinstall .item-update {
+  display: none;
+}
+
+/* --- Информеры и loader --- */
+.informer {
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  display: none;
+  opacity: 0;
+  text-align: center;
+}
+
+.informer div {
+  color: black;
+  font-size: 22px;
+  padding-top: 90px;
+  text-align: center;
+  width: 100%;
+}
+
+.loader {
+  background: url("../img/loader.gif") no-repeat scroll center center rgba(255, 255, 255, 0.85);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  display: none;
+  opacity: 1;
+  z-index: 4;
+}
+
+.info_block {
+  opacity: 1;
+}
+
+.blocked .info_block {
+  opacity: 0.3;
+}
+
+.blocked_item {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+}
+
+.blocked .blocked_item {
+  display: block;
+}
+
+.item_list .catalog_item .item_content:hover {
+  border: 1px solid #3697cd;
+}
+
+/* ============================================
+   Боковая панель
+   ============================================ */
+.box {
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 3px rgba(119, 117, 117, 0.1);
+  box-sizing: border-box;
+}
+
+.box h3,
+.box h4 {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.box ul {
+  margin-left: 0;
+}
+
+.mh {
+  min-height: 150px;
+  overflow: hidden;
+}
+
+.sidebar2 {
+  padding-left: 5px;
+}
+
+.cont2 {
+  padding-right: 10px;
+}
+
+.list-tools {
+  margin-bottom: 15px;
+}
+
+/* ============================================
+   Сетка карточек
+   ============================================ */
+.item_list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+.catalog_item {
+  padding: 0 10px 20px;
+  box-sizing: border-box;
+}
+
+.item_content {
+  min-height: 350px;
+  border: 1px solid #e0e0e0;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.item_content:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.info_block {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ============================================
+   Плашка с иконкой типа
+   ============================================ */
+.catalog_thumb {
+  position: relative;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f6f8;
+  border-bottom: 1px solid #e5e8eb;
+  overflow: hidden;
+}
+
+.catalog_thumb::before {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 48px;
+  line-height: 1;
+  color: #b8c1c9;
+  transition: color 0.2s;
+}
+
+.catalog_item:hover .catalog_thumb::before {
+  color: #6b7c8a;
+}
+
+/* Иконки по типам */
+.catalog_item.type-snippets .catalog_thumb::before { content: "\f121"; }
+.catalog_item.type-plugins  .catalog_thumb::before { content: "\f1e6"; }
+.catalog_item.type-modules  .catalog_thumb::before { content: "\f1b2"; }
+.catalog_item.type-tvs      .catalog_thumb::before { content: "\f03a"; }
+.catalog_item.type-lib      .catalog_thumb::before { content: "\f02d"; }
+
+/* Цвета фонов и иконок по типам */
+.catalog_item.type-snippets .catalog_thumb { background: #eaf3fb; }
+.catalog_item.type-plugins  .catalog_thumb { background: #eaf7ee; }
+.catalog_item.type-modules  .catalog_thumb { background: #f2ebf9; }
+.catalog_item.type-tvs      .catalog_thumb { background: #fdf3e6; }
+.catalog_item.type-lib      .catalog_thumb { background: #f0f2f4; }
+
+.catalog_item.type-snippets .catalog_thumb::before { color: #3498db; }
+.catalog_item.type-plugins  .catalog_thumb::before { color: #27ae60; }
+.catalog_item.type-modules  .catalog_thumb::before { color: #8e44ad; }
+.catalog_item.type-tvs      .catalog_thumb::before { color: #e67e22; }
+.catalog_item.type-lib      .catalog_thumb::before { color: #7f8c8d; }
+
+/* ============================================
+   Контент карточки
+   ============================================ */
+.catalog_info {
+  flex: 1;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.row-category {
+  text-decoration: none;
+  color: inherit;
+}
+
+.row-category:hover {
+  text-decoration: none;
+}
+
+.row-category h3 {
+  margin: 0;
+  padding: 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2a2f36;
+  line-height: 1.3;
+}
+
+.descript {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #666;
+  flex: 1;
+  min-height: 36px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+/* --- Мета (версия / автор / дата) --- */
+.extra-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 10px;
+  margin-bottom: 12px;
+  border-top: 1px solid #f0f2f4;
+  font-size: 11.5px;
+  color: #8894a0;
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.meta-item .fa {
+  color: #aab3bd;
+  font-size: 11px;
+}
+
+/* --- Кнопки установки --- */
+.install_extras {
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.install_extras .btn {
+  padding: 7px 14px;
+  font-size: 12.5px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.install_extras .btn:hover {
+  opacity: 0.88;
+  text-decoration: none;
+}
+
+.install_extras .btn-success {
+  background: #27ae60;
+  color: #fff;
+}
+
+.install_extras .btn-primary {
+  background: #2a6fd6;
+  color: #fff;
+}
+
+.install_extras select[name="link"] {
+  display: none;
+}
+
+/* ============================================
+   Форма установки из архива
+   ============================================ */
+progress#install_file_prg {
+  width: 100%;
+}
+
+#install_file_btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 3px;
+  background: #2a6fd6;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#install_file_btn:hover {
+  background: #1d5bb8;
+}
+
+/* ============================================
+   Поля ввода (стиль Evo)
+   ============================================ */
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="text"],
+input[type="url"],
+textarea,
+select {
+  appearance: none;
+  outline: none;
+  height: 24px;
+  background: #fbfbfb;
+  border-color: #d4d4d4 !important;
+  border-width: 1px !important;
+  border: solid;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  background: #fff;
+  border-color: #3697cd;
+}
+
+input#store_search {
+  padding: 4px 6px;
+  height: 28px;
+}
+
+input#store_search:focus {
+  border-color: #3697cd !important;
+}
+
+#hide-side {
+  min-width: 40px;
+  margin-right: 8px;
+}
+
+.bt-active,
+.dark .bt-active {
+  color: #3697cd;
+  box-shadow: none;
+}
+
+/* ============================================
+   Состояние "список"
+   ============================================ */
+.catalog_item.liststyle {
+  padding-bottom: 5px;
+}
+
+.catalog_item.liststyle .item_content {
+  min-height: 100px;
+  flex-direction: row;
+}
+
+.catalog_item.liststyle .info_block {
+  flex-direction: row;
+  align-items: center;
+}
+
+.catalog_item.liststyle .catalog_thumb {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.catalog_item.liststyle .catalog_info {
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 16px;
+}
+
+.catalog_item.liststyle .row-category h3 {
+  margin: 0;
+  padding: 0;
+}
+
+.catalog_item.liststyle .descript {
+  min-height: auto;
+  margin-bottom: 0;
+  flex: 2;
+}
+
+.catalog_item.liststyle .extra-meta {
+  border-top: none;
+  padding-top: 0;
+  margin-bottom: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.catalog_item.liststyle .install_extras {
+  margin-top: 0;
+  margin-left: auto;
+  flex-wrap: nowrap;
+}
+
+/* ============================================
+   Тёмная тема
+   ============================================ */
+.darkness .box,
+.darkness .item_content {
+  border: 1px solid #414449;
+  background: #202329;
+}
+
+.darkness #store_search {
+  border: #414449 1px solid !important;
+}
+
+.darkness .catalog_info h3 {
+  color: #e4e6e8;
+}
+
+.darkness .descript {
+  color: #a8b0b8;
+}
+
+.darkness .extra-meta {
+  border-top-color: #414449;
+  color: #7a828a;
+}
+
+/* ============================================
+   Утилиты
+   ============================================ */
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.wrapper {
+  height: auto;
+  margin-top: 5px;
+}
+
+.tpl {
+  display: none;
+}
+
+#loading {
+  background: url(../img/loading.png);
+  display: block;
+  width: 39px;
+  height: 39px;
+  position: fixed;
+  z-index: 100;
+  left: 48%;
+  top: 47%;
+}
