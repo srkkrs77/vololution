@@ -1,9 +1,3 @@
-# CHANGELOG-07.md — Раздел 4.4–4.8
-
-**Часть 7 из 14.** Пакеты с правками: evoSearch + editDocs + MultiCategories + WebP Converter + FormLister.
-
----
-
 ### 4.4 evoSearch — 5 правок в 1 файле
 
 **Автор:** Pathologic  
@@ -256,14 +250,14 @@
 
 ---
 
-### 4.7 WebP Converter — 5 правок (код плагина + дескриптор)
+### 4.7 WebP Converter — 4 правки (в коде плагина)
 
 **Автор:** Pathologic  
 **CHANGELOG:** 4.7  
 **Дата правки:** 11.10.2026  
 **Причина:** PHP 8.5 падал на `DOMDocument::loadHTML()` при пустом контенте + `HTML-ENTITIES` удалена в PHP 8.4+.
 
-**Переведён из «пакетов без правок» в «патченные»** (было 6 → стало 7 → стало 8 после FormLister).
+**Переведён из «пакетов без правок» в «патченные»** (было 6 → стало 7).
 
 ---
 
@@ -433,117 +427,7 @@ switch ($e->name) {
 
 ---
 
-### 4.8 FormLister — 1 правка в 1 файле
-
-**Автор:** Pathologic  
-**CHANGELOG:** 4.8  
-**Дата правки:** 13.10.2026  
-**Причина:** PHP 8.4+ выбрасывает `ValueError` при передаче пустой строки в `idn_to_ascii()`.
-
-**Переведён из «пакетов без правок» в «патченные»** (было 7 → стало 8).
-
----
-
-#### Проблема
-
-При отправке формы FormLister с **пустым полем email** или **email без символа `@`** — **белая страница и 500**.
-
-**Причина:** в методе `sanitizeEmail()` класса `Validator` вызывается `idn_to_ascii()`. В PHP 8.4+ эта функция выбрасывает `ValueError`, если ей передать **пустую строку**. FormLister не проверял, пустая ли строка, прежде чем её отправить.
-
----
-
-#### Файл с правкой
-
-**`assets/snippets/FormLister/lib/Validator.php`**
-
-**Метод `sanitizeEmail()` — было:**
-
-```php
-protected static function sanitizeEmail($email)
-{
-    if (function_exists('idn_to_ascii')) {
-        $_email = explode('@', $email);
-        $_email[1] = $_email[1] ?? '';
-        if (defined('IDNA_NONTRANSITIONAL_TO_ASCII') && defined('INTL_IDNA_VARIANT_UTS46')) {
-            $_email[1] = idn_to_ascii($_email[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
-        } else {
-            $_email[1] = idn_to_ascii($_email[1]);
-        }
-        $email = implode('@', $_email);
-    }
-    return $email;
-}
-```
-
-**Стало:**
-
-```php
-protected static function sanitizeEmail($email)
-{
-    if (function_exists('idn_to_ascii') && !empty($email)) {
-        $_email = explode('@', $email);
-        $_email[1] = $_email[1] ?? '';
-        if (empty($_email[1])) {
-            return $email;
-        }
-        try {
-            if (defined('IDNA_NONTRANSITIONAL_TO_ASCII') && defined('INTL_IDNA_VARIANT_UTS46')) {
-                $_email[1] = idn_to_ascii($_email[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
-            } else {
-                $_email[1] = idn_to_ascii($_email[1]);
-            }
-        } catch (\ValueError $e) {
-            // Fallback — возвращаем как есть
-            return $email;
-        }
-        $email = implode('@', $_email);
-    }
-    return $email;
-}
-```
-
-**Что сделано:**
-
-1. **`!empty($email)`** — не обрабатывать пустую строку.
-2. **`if (empty($_email[1])) return $email;`** — если нет домена (нет символа `@`), сразу вернуть как есть.
-3. **`try/catch (\ValueError $e)`** — если `idn_to_ascii` всё равно упадёт (невалидный IDN), вернуть строку без обработки.
-
----
-
-#### Где применено
-
-| Копия | Что |
-|---|---|
-| Прод `studio-milstein.de` | Файл заменён |
-| Рабочая `C:\laragon\www\vol.test\` | Заменить |
-| Дистрибутив `D:\VoloLution-CMS-1.4.37\` | Заменить |
-| Форк (после создания) | Коммит |
-
----
-
-#### Что проверено
-
-- ✅ Форма с пустым email — не падает, выдаёт ошибку валидации.
-- ✅ Форма с email без `@` — не падает.
-- ✅ Форма с корректным email — работает.
-- ✅ PHP error_log — без `ValueError`.
-
----
-
-#### Итого по FormLister
-
-| Файл | Правок |
-|---|---|
-| `assets/snippets/FormLister/lib/Validator.php` | 1 |
-| **Итого** | **1** |
-
-**При установке через Store:** ZIP `FormLister.zip`, alias `FormLister`, категория «Сниппеты».
-
-**Версия FormLister:** без изменений (не указываем — своя внутренняя).
-
----
-
-### 4.9. Сводная таблица патченных пакетов (обновлено 13.10.2026)
+### 4.8. Сводная таблица патченных пакетов (обновлено 11.10.2026)
 
 | # | Пакет | Файлов | Правок | CHANGELOG |
 |---|---|---|---|---|
@@ -554,5 +438,4 @@ protected static function sanitizeEmail($email)
 | 5 | **editDocs** | 2 | 21 | 4.5 |
 | 6 | **MultiCategories** | 1 | 2 | 4.6 |
 | 7 | **WebP Converter** | 2 | 5 | 4.7 |
-| 8 | **FormLister** | 1 | 1 | 4.8 |
-| **Всего** | **8 пакетов** | **13 файлов** | **54 правки** | — |
+| **Всего** | **7 пакетов** | **12 файлов** | **53 правки** | — |

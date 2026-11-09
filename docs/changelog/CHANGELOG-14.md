@@ -1,4 +1,4 @@
-CHANGELOG-14.md — Раздел 18–19 (последняя часть)
+CHANGELOG-14.md — Раздел 18–20 (последняя часть)
 Часть 14 из 14. Форк и новая архитектура + исправление CSRF-JS.
 
 markdown
@@ -272,4 +272,66 @@ CSRF-перехват XHR должен вызывать setRequestHeader в send
 
 Тестировать правки ядра на сторонних пакетах (SimpleGallery, MultiTV и т.д.), а не только на стандартных формах админки. Наш CSRF-патч 3.4 обкатывался только на ядре — отсюда пропустили.
 
-Конец CHANGELOG.
+---
+
+## РАЗДЕЛ 20. КАСТОМНАЯ TV image_alt_caption
+
+**Дата:** 11.10.2026  
+**Статус:** ✅ работает  
+**Не зависит от ядра CE.**
+
+### 20.1. Задача
+
+Нужна TV, которая хранит:
+- картинку (с Browse),
+- alt,
+- подпись (caption).
+
+Одной TV. Без MultiTV. С превью в форме.
+
+### 20.2. Решение
+
+**Механизм:** `custom input` + `@INCLUDE` (штатный способ Evo 1.4).
+
+**Файл:** `assets/tvs/image_alt_caption/image_alt_caption.php`
+
+**Что делает:**
+- Получает ID TV через `$field_id`.
+- Получает ID документа через `$_REQUEST['id']` (с fallback).
+- Читает JSON из `site_tmplvar_contentvalues`.
+- Рендерит три поля: изображение + Browse + превью, alt, подпись.
+- Синхронизирует JSON в скрытое поле через JS.
+- Превью — абсолютный URL через `MODX_SITE_URL`.
+
+**TV:**
+- Тип ввода: `Custom Input`
+- Возможные значения: `@INCLUDE/assets/tvs/image_alt_caption/image_alt_caption.php`
+
+**Сниппет вывода:** `getImage`
+- Принимает `&tv=` — имя TV.
+- Читает JSON, выводит `<figure><img ... loading="lazy"><figcaption>...</figcaption></figure>`.
+
+**Вызов:**
+```
+[[getImage? &tv=`image_studio`]]
+```
+
+### 20.3. Известные ограничения
+
+1. Кэш браузера.** Форма может кэшироваться. Решено патчем `header.inc.php` (раздел 2.8).
+2. evoBabel.** При синхронизации языков TV не копируется автоматически. Нужно добавлять ID TV в настройку evoBabel «ids TV для синхронизации».
+3. Копирование документа.** При дублировании связь значений TV может не подтянуться.
+
+### 20.4. В перспективе
+
+Оформить как отдельный пакет:
+- Дескриптор TV — `install/assets/tvs/image_alt_caption.tpl`
+- Сниппет — `install/assets/snippets/getImage.tpl`
+- Файл рендера — `assets/tvs/image_alt_caption/image_alt_caption.php`
+- README с описанием и ограничениями
+
+Добавить в Store как 17-й пакет.
+
+---
+
+**Конец CHANGELOG.**

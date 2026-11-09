@@ -1,14 +1,6 @@
-# CHANGELOG-13.md — Раздел 15–17
-
-**Часть 13 из 14.** SEO-пакет seoVolo + патчи корневого `install/` + следующие шаги.
-
-**Обновлено:** 12.10.2026 (seoVolo 1.0.7, hreflang, языки, og:type).
-
----
-
 ## РАЗДЕЛ 15. SEO-ПАКЕТ seoVolo — СВОЯ РАЗРАБОТКА
 
-**Статус:** ✅ выполнено 09.10.2026. Обновлено 12.10.2026.  
+**Статус:** ✅ выполнено 09.10.2026.  
 **Не зависит от ядра CE.** Не сломается при обновлении апстрима.
 
 ### 15.1. Цель и результат
@@ -19,7 +11,7 @@ SEO-пакет для генерации мета-тегов из коробки
 
 - `<title>`, `<meta description>`, `<meta robots>`, `<meta keywords>` (опционально)
 - Canonical URL — авто или через TV
-- Open Graph (7+ тегов) + Twitter Cards (4–6 тегов)
+- Open Graph (7 тегов) + Twitter Cards (4–6 тегов)
 - Schema.org JSON-LD: Organization, WebSite, WebPage, Article / NewsArticle / BlogPosting, Product, Service, FAQPage, BreadcrumbList
 - Hreflang (включается настройкой, работает с EvoBabel)
 - 11 TV на отдельной вкладке «SEO» в форме документа
@@ -37,16 +29,16 @@ SEO-пакет для генерации мета-тегов из коробки
 | `seo_og_image.tpl` | 1.0.0 |
 | `seo_canonical.tpl` | 1.0.0 |
 | `seo_noindex.tpl` | 1.0.0 |
-| `seo_schema_type.tpl` | **1.0.7** (40 типов) |
+| `seo_schema_type.tpl` | 1.0.0 |
 | `seo_hreflang.tpl` | 1.0.0 |
-| `sitemap_priority.tpl` | **1.0.1** |
-| `sitemap_changefreq.tpl` | **1.0.1** |
+| `sitemap_priority.tpl` | **1.0.1** (11.10.2026) |
+| `sitemap_changefreq.tpl` | **1.0.1** (11.10.2026) |
 | `sitemap_exclude.tpl` | 1.0.0 |
 
 **Сниппет:**
 
-- `install/assets/snippets/seoVolo.tpl` (v1.0.7)
-- `assets/snippets/seoVolo/snippet.seoVolo.php` (v1.0.7)
+- `install/assets/snippets/seoVolo.tpl`
+- `assets/snippets/seoVolo/snippet.seoVolo.php`
 
 **Плагин:**
 
@@ -86,14 +78,8 @@ SEO-пакет для генерации мета-тегов из коробки
 
 **Обновлено 11.10.2026:**
 
-- `install/assets/tvs/sitemap_priority.tpl` — v1.0.1
-- `install/assets/tvs/sitemap_changefreq.tpl` — v1.0.1
-
-**Обновлено 12.10.2026:**
-
-- `assets/snippets/seoVolo/snippet.seoVolo.php` — v1.0.7
-- `install/assets/snippets/seoVolo.tpl` — v1.0.7
-- `install/assets/tvs/seo_schema_type.tpl` — v1.0.7 (40 типов)
+- `install/assets/tvs/sitemap_priority.tpl` — v1.0.1 (правка `@input_options`)
+- `install/assets/tvs/sitemap_changefreq.tpl` — v1.0.1 (правка `@input_options`)
 
 ### 15.4. Где подключается
 
@@ -173,7 +159,7 @@ mm_widget_tags('seo_keywords', ',');
 
 ### 15.11. Техдолг SEO-пакета
 
-**Обновлено 12.10.2026.**
+**Обновлено 11.10.2026** (уточнение по sitemap).
 
 1. **Индикатор длины description** — отложен (нужен виджет TV).
 
@@ -200,11 +186,9 @@ mm_widget_tags('seo_keywords', ',');
 
 4. **Schema.org Product** — без `seo_sku`, `seo_price` (TV не создаются).
 
-5. **Хардкод регионов в `seoVolo_getLocale`** — для `en`, `ja`, `zh`, `ar`, `he`, `ko`. Для остальных языков locale строится автоматически.
+5. **Hreflang** — требует активного EvoBabel.
 
-6. **`docs/seoVolo-guide.md`** — устарел, написан под старую концепцию «вкладка в Конфигурации». Переписать под модуль.
-
-### 15.12. Результаты тестирования (09.10.2026 + 12.10.2026)
+### 15.12. Результаты тестирования (09.10.2026)
 
 **Проверено:**
 
@@ -215,15 +199,12 @@ mm_widget_tags('seo_keywords', ',');
 - ✅ Модуль `seoVolo Settings` — форма, сохранение, Browse, языки ru/en/de
 - ✅ Настройки создаются автоматически плагином
 - ✅ PHP error_log — пусто (после патчей `install/`)
-- ✅ **Hreflang работает** (12.10.2026)
-- ✅ **`og:locale` / `inLanguage`** — корректны для каждого языка (12.10.2026)
-- ✅ **Breadcrumbs** — без языковых контейнеров (12.10.2026)
 
 **Не проверено:**
 
 - ⬜ Индикатор длины description
-- ⬜ Schema.org Article / Product / FAQPage (с реальными данными)
-- ⬜ Description с реальным контентом (сайт пустой)
+- ⬜ Hreflang на мультиязычном сайте
+- ⬜ Schema.org Article / Product / FAQPage
 
 ### 15.13. Исправление TV sitemap (11.10.2026)
 
@@ -237,7 +218,11 @@ mm_widget_tags('seo_keywords', ',');
 <priority>0.5 (regular)</priority>
 ```
 
-Стандарт `sitemaps.org` допускает только чистые значения.
+Стандарт `sitemaps.org` допускает только чистые значения:
+- `changefreq`: `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never`
+- `priority`: числа от `0.0` до `1.0`
+
+Google в Search Console такие записи отметит как ошибки.
 
 #### Причина
 
@@ -246,6 +231,7 @@ mm_widget_tags('seo_keywords', ',');
 **Было:**
 ```
 always==always (every access)||hourly==hourly||...
+1.0==1.0 (home)||0.5==0.5 (regular)||...
 ```
 
 В Evo 1.4 формат `@input_options` — **`label==value`** (сначала видно в выпадашке, потом сохраняется в БД). Было наоборот — в БД сохранялся label с описанием в скобках.
@@ -254,12 +240,22 @@ always==always (every access)||hourly==hourly||...
 
 **1. Файлы TV переписаны** (`install/assets/tvs/`):
 
-**`sitemap_changefreq.tpl`:**
+**`sitemap_changefreq.tpl` — было:**
+```
+@input_options always==always (every access)||hourly==hourly||daily==daily||weekly==weekly||monthly==monthly (default)||yearly==yearly||never==never
+```
+
+**Стало:**
 ```
 @input_options always||hourly||daily||weekly||monthly||yearly||never
 ```
 
-**`sitemap_priority.tpl`:**
+**`sitemap_priority.tpl` — было:**
+```
+@input_options 1.0==1.0 (home)||0.5==0.5 (regular)||...
+```
+
+**Стало:**
 ```
 @input_options 0.0||0.1||0.2||0.3||0.4||0.5||0.6||0.7||0.8||0.9||1.0
 ```
@@ -281,81 +277,20 @@ WHERE tmplvarid IN (
 
 `eh2v_` — префикс прода `studio-milstein.de`. На `vol.test` — `gyl8_`.
 
-**4. Очистить кэш Evo.**
+**4. Очистить кэш Evo** — Админка → Сайт → Очистить кэш.
 
 #### Итог
 
-`sitemap.xml` генерируется с чистыми значениями.
+`sitemap.xml` генерируется с чистыми значениями:
+
+```xml
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+```
 
 #### Урок
 
-**Формат `@input_options` в Evo 1.4 — `label==value`.** Не наоборот.
-
-### 15.14. Обновление сниппета до 1.0.7 (12.10.2026)
-
-#### Что изменилось
-
-**1. Hreflang работает.**
-
-**Было:** вызывалась несуществующая `evoBabel_getTranslations($docId)`. Функция `seoVolo_getHreflang` всегда возвращала пустой массив — hreflang никогда не выводился.
-
-**Стало:** читает TV `relation` от evoBabel напрямую. Формат значения: `de:5||en:12` (alias языка : ID документа). Fallback на родителя, если у документа нет своей TV.
-
-**2. Язык страницы — динамически.**
-
-**Было:** `$langPrefix = substr($mgrLang, 0, 2)` — язык менеджера. На английской странице `og:locale` был `ru_RU`.
-
-**Стало:** функция `seoVolo_getPageLang` — идёт к корневому родителю документа, читает его alias (`de`, `en`, `ru`). Fallback на язык менеджера, потом `en`.
-
-**3. `og:locale` и `inLanguage` — динамически.**
-
-**Было:** хардкод `['ru' => 'ru_RU', 'en' => 'en_US']`.
-
-**Стало:** функция `seoVolo_getLocale($langAlias)` — строит `og:locale` и `inLanguage` по формуле `lang_REGION`. Исключения для нестандартных: `en → US`, `ja → JP`, `zh → CN`, `ar → SA`, `he → IL`, `ko → KR`.
-
-**При добавлении нового языка** (например, `fr`) — работает автоматически.
-
-**4. Title separator — с пробелами.**
-
-**Было:** `$modx->config['seo_title_separator'] ?? ' — '`. Если настройка пуста — выводилось `home—Studio Milstein`.
-
-**Стало:** принудительно оборачивается в пробелы: `' ' . $titleSeparator . ' '`. Выводит `home — Studio Milstein`.
-
-**5. Breadcrumbs — без языковых контейнеров.**
-
-**Было:** в Schema.org BreadcrumbList попадали записи `de` / `en` с URL `/de.html` / `/en.html`.
-
-**Стало:** функция `seoVolo_getBreadcrumbs` проверяет `parent = 0` и alias 2-3 латинские буквы — пропускает.
-
-**6. `seoVolo_ogType` — 40 маппингов.**
-
-**Было:** 7 маппингов (Article, NewsArticle, BlogPosting, Product, Service, FAQPage, WebPage).
-
-**Стало:** 40 маппингов. Покрывает все основные Schema.org типы: Event, Recipe, Course, HowTo, JobPosting, Person, ProfilePage, Book, VideoObject, Movie, TVSeries, MusicRecording, MusicAlbum и др.
-
-**7. TV `seo_schema_type` — 40 значений.**
-
-**Было:** 8 значений.
-
-**Стало:** 40 значений.
-
-#### Файлы, обновлённые до 1.0.7
-
-- `assets/snippets/seoVolo/snippet.seoVolo.php`
-- `install/assets/snippets/seoVolo.tpl`
-- `install/assets/tvs/seo_schema_type.tpl`
-
-#### Что проверено
-
-- ✅ DE: `og:locale = de_DE`, `inLanguage = de-DE`
-- ✅ EN: `og:locale = en_US`, `inLanguage = en-US`
-- ✅ Hreflang: `de` → `/`, `en` → `/home.html`, `x-default` → канонический
-- ✅ Breadcrumbs: языковые контейнеры исключены
-- ✅ Title: `home — Studio Milstein` (с пробелами)
-
-#### Урок
-
-Хардкод языков — плохо. Если в системе уже есть список языков (через alias папок) — надо строить из него. Тогда добавление нового языка не требует правок кода.
+**Формат `@input_options` в Evo 1.4 — `label==value`.** Не наоборот. Если хочешь без label — просто значения через `||`. С описанием — `видно==сохраняется`.
 
 ---
 
@@ -411,7 +346,7 @@ WHERE tmplvarid IN (
 
 ## РАЗДЕЛ 17. СЛЕДУЮЩИЕ ШАГИ — АКТУАЛЬНО
 
-**Обновлено 12.10.2026.**
+**Обновлено 11.10.2026.**
 
 1. **Форк на GitHub** — установка GitHub Desktop, создание форка `evocms-community/evolution` → `srkkrs77/vololution`, клонирование. См. `CHANGELOG-14`.
 2. **Инфраструктура форка** — `composer.json`, `src/`, `.gitignore`. См. `CHANGELOG-14`.
@@ -419,10 +354,9 @@ WHERE tmplvarid IN (
 4. **CSRF-техдолг** — раздел 9.1, задачи A, B, C (D закрыта 11.10.2026).
 5. **Живой поиск (AJAX autocomplete)** — Этап 1.2 roadmap.
 6. **Индикатор длины description** — через виджет TV.
-7. **`docs/seoVolo-guide.md`** — переписать под модуль.
+7. **Синхронизация документации** — `docs/seoVolo-guide.md` переписать под модуль.
 8. **Проверка пакетов через Store** — MultiTV, editDocs, FormResults.
 9. **`sitemap_exclude`** — связать с DLSitemap (или через `&filters=`, или форк DLSitemap).
-10. **Оформление `image_alt_caption`** как отдельного пакета.
 
 ---
 
@@ -436,8 +370,4 @@ WHERE tmplvarid IN (
 
 **Дата:** 11.10.2026. См. `CHANGELOG-14`.
 
----
-
-## РАЗДЕЛ 20. КАСТОМНАЯ TV image_alt_caption
-
-**Дата:** 11.10.2026. См. `CHANGELOG-14`.
+**Конец части 13.**
