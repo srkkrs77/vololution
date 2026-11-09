@@ -513,3 +513,52 @@ WHERE setting_name = 'cache_type';
 - Фаза 3: ~15 минут
 
 **Итого: минимум полдня.**
+
+---
+
+## ДОПОЛНИТЕЛЬНЫЕ ПАТЧИ И РАЗРАБОТКИ (09.11.2026)
+
+### 14. `index.php` (корень сайта) — GDPR-патч
+- **Правка:** Отложенный запуск `startCMSSession()`. Сессия стартует только для запросов из `/manager/`, при наличии `HTTP_REFERER` оттуда, или если у пользователя уже есть Evo-cookie.
+- **Причина:** Запрет установки cookie до согласия пользователя (EU GDPR / TTDSG) и совместимость с `evoBabelLexicon`.
+- **CHANGELOG:** Раздел 21.
+
+### Установщик (Папка `install/`) — Фиксы PHP 8.4
+- **`install/actions/action_options.php`** (строка ~82): `in_array('sample', (array)$preset[5])` — защита от `TypeError` при отсутствии `@installset`.
+- **`install/instprocessor.php`** (строки ~410, ~464): `in_array('sample', (array)$moduleChunk[5])` и `(array)$moduleModule[7]` — те же причины.
+- **`install/setup.info.php`** (строка ~173): замена `: false` на `: []` — чтобы не ломать установку в PHP 8.4.
+
+### Свои разработки (Папка `assets/` и `install/`)
+- **Сниппет `cookieConsent`** (`assets/snippets/cookieConsent/snippet.cookieConsent.php`):
+  - Выводит баннер GDPR/TTDSG. Мультиязычный (RU, EN, DE, FR, ES, IT). Сохраняет выбор в `localStorage`.
+  - Дескриптор: `install/assets/snippets/cookieConsent.tpl`.
+- **Чанк `mm_rules.tpl`** (`install/assets/chunks/mm_rules.tpl`):
+  - Обновлен до v2.1.0. Добавлен скрипт, передающий ID TV `seo_description` в JS для работы индикатора длины (обход бага Evo, где TV не всегда имеет ID в HTML).
+
+### Пакет seoVolo — Фиксы 1.0.8 (Фронтенд)
+- **`assets/snippets/seoVolo/snippet.seoVolo.php`**:
+  - Добавлен `html_entity_decode` в Раздел 8, 10, 11 и функцию `seoVolo_truncate` (устранение `&auml;` в мета-тегах).
+  - Раздел 15: изменен приоритет OG-картинки (сначала `$ogDefault`, потом `$seoOrgLogo`).
+  
+---
+
+## ДОПОЛНИТЕЛЬНЫЕ ПАТЧИ (09.11.2026)
+
+### ЯДРО — 14-Й ФАЙЛ
+
+### 14. `index.php` (корень сайта)
+- **Правка:** Отложенный запуск `startCMSSession()`. Сессия стартует только для запросов из `/manager/` (включая Referer) или если уже есть Evo-куки (`evo*`, `PHPSESSID`).
+- **Причина:** GDPR / TTDSG (запрет установки cookie до согласия) + совместимость с `evoBabelLexicon`.
+- **CHANGELOG:** 21.1
+
+### УСТАНОВЩИК (Папка `install/`) — ФИКСЫ PHP 8.4
+
+- **`install/actions/action_options.php`** (строка ~82): `in_array('sample', (array)$preset[5])` — защита от `TypeError`.
+- **`install/instprocessor.php`** (строки ~410, ~464): `in_array('sample', (array)$moduleChunk[5])` и `(array)$moduleModule[7]` — защита от `TypeError`.
+- **`install/setup.info.php`** (строка ~173): замена `: false` на `: []` — чтобы не ломать установку.
+
+### СВОИ РАЗРАБОТКИ
+
+- **Сниппет `cookieConsent`:** `assets/snippets/cookieConsent/snippet.cookieConsent.php` (v1.1.0). Дескриптор: `install/assets/snippets/cookieConsent.tpl`.
+- **Чанк `mm_rules.tpl`:** `install/assets/chunks/mm_rules.tpl` (v2.1.0). Добавлен индикатор длины `seo_description`.
+- **Пакет `seoVolo`:** фиксы `html_entity_decode` (Разделы 8, 10, 11, 15) и приоритет `og_default_image`.

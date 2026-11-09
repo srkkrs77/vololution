@@ -160,7 +160,15 @@ SimpleGallery — плагин, работающий через AJAX (`assets/pl
 - **Aharito** — DLSiblings (на основе DLPrevNext от Agel_Nash).
 - **webber** — evoBabel.
 - GitHub: `github.com/Pathologic`, `github.com/Grinyaha`, `github.com/aharito`.
+### 6.8. Своя разработка: Сниппет cookieConsent (GDPR)
+**Дата:** 09.11.2026
 
+Для соблюдения законов EU (GDPR / TTDSG) был создан собственный сниппет `cookieConsent`.
+- **Файл:** `assets/snippets/cookieConsent/snippet.cookieConsent.php` (v1.1.0).
+- **Дескриптор для установщика:** `install/assets/snippets/cookieConsent.tpl`.
+- **Функционал:** Выводит баннер согласия на 6 языках (RU, EN, DE, FR, ES, IT). Сохраняет выбор пользователя в `localStorage` (без установки cookie на сервере).
+- **Связь с ядром:** Работает в паре с GDPR-патчем в `index.php` (отложенный старт сессии), чтобы до клика по баннеру сайт вообще не ставил cookie.
+- **Документация:** `docs/libs/cookieConsent.md`.
 ---
 
 **Конец части 6.**

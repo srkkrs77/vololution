@@ -121,10 +121,10 @@ seoVolo_attachTVsToTemplate() — привязывает 11 TV к новым ш�
 
 Мультиязычность: ru, en, de через lang/.
 
-8.9. Отложено
-Индикатор длины description. Попытки через плагин (OnDocFormPrerender, OnDocFormRender, OnSiteSettingsRender) — не сработали. Правильный путь — виджет TV (Evo @output_widget). Отложено.
-
-Файлы assets/plugins/seoVolo/css/seo.css, js/seo.js, lang/{ru,en}.php — готовы, ждут подключения.
+### 8.9. Выполнено (09.11.2026)
+- **Индикатор длины description:** Реализован. JS-скрипт подключается через чанк `mm_rules.tpl` (v2.1.0). Автоматически определяет ID TV из базы и передает его в JS. Мультиязычный (RU, EN, DE).
+- **Open Graph (OG Image):** Исправлен приоритет в сниппете. Теперь `og_default_image` (картинка по умолчанию) имеет приоритет над `seo_org_logo` (логотип).
+- **HTML-сущности в мета-тегах:** Устранены кракозябры (например, `&auml;`). В Разделы 8, 10, 11 сниппета и функцию `seoVolo_truncate` добавлена очистка через `html_entity_decode()`.
 
 8.10. Техдолг SEO-пакета (обновлено 12.10.2026)
 Индикатор длины description — отложен (нужен виджет TV).

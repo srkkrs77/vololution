@@ -1,7 +1,7 @@
 CONTEXT-05.md — Что сделано: ядро + CSRF
 Часть 5 из 19. Читать после CONTEXT.md, CONTEXT-01.md — CONTEXT-04.md.
 
-## 5. ЧТО СДЕЛАНО: ЯДРО (13 ПАТЧЕЙ) + CSRF-ЗАЩИТА
+## 5. ЧТО СДЕЛАНО: ЯДРО (14 ПАТЧЕЙ) + CSRF-ЗАЩИТА
 ### 5.1. 13 патчей ядра
 #	Файл	Что сделано
 1	manager/includes/protect.inc.php	Убран E_STRICT
@@ -18,6 +18,7 @@ CONTEXT-05.md — Что сделано: ядро + CSRF
 12	assets/plugins/managermanager/widgets/ddresizeimage/phpthumb.class.php	$string{0} → $string[0]
 13	assets/plugins/managermanager/widgets/ddresizeimage/phpthumb.functions.php	$string{0} → $string[0]
 manager/index.php — не менялся.
+| 14 | `index.php` (корень сайта) | GDPR-патч: отложенный запуск `startCMSSession()` (только для админки и авторизованных) |
 
 Основные группы патчей:
 - PHP 8.5-совместимость (E_STRICT, ??, string offsets).
