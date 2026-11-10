@@ -10,3 +10,6 @@ Thumbs.db
 *.log
 *.bak
 *.tmp
+
+# Microsoft Office temporary files
+~$*
