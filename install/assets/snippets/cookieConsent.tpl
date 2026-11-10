@@ -4,7 +4,7 @@
  * GDPR/TTDSG Cookie Banner with multi-language support.
  *
  * @category    snippet
- * @version     1.1.0
+ * @version     2.0.1
  * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal    @modx_category VoloLution
  * @internal    @installset base, sample
