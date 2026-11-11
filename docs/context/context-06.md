@@ -163,11 +163,11 @@ SimpleGallery — плагин, работающий через AJAX (`assets/pl
 ### 6.8. Своя разработка: Сниппет cookieConsent (GDPR)
 **Дата:** 09.11.2026
 
-Для соблюдения законов EU (GDPR / TTDSG) был создан собственный сниппет `cookieConsent`.
-- **Файл:** `assets/snippets/cookieConsent/snippet.cookieConsent.php` (v1.1.0).
-- **Дескриптор для установщика:** `install/assets/snippets/cookieConsent.tpl`.
-- **Функционал:** Выводит баннер согласия на 6 языках (RU, EN, DE, FR, ES, IT). Сохраняет выбор пользователя в `localStorage` (без установки cookie на сервере).
-- **Связь с ядром:** Работает в паре с GDPR-патчем в `index.php` (отложенный старт сессии), чтобы до клика по баннеру сайт вообще не ставил cookie.
+Для соблюдения законов EU (GDPR / TTDSG) был создан собственный сниппет `cookieConsent` (v2.0.1).
+- **Архитектура (4 части):** Сниппет (логика, `assets/snippets/cookieConsent/`) + 3 чанка (`cookieConsent.tpl` — HTML, `cookieConsent.css` — стили, `cookieConsent.js` — логика).
+- **Дескрипторы для установщика:** `install/assets/snippets/cookieConsent.tpl` и 3 файла в `install/assets/chunks/` (`cookieConsent.tpl`, `cookieConsent.css.tpl`, `cookieConsent.js.tpl`).
+- **Функционал:** Выводит баннер согласия на 6 языках (RU, EN, DE, FR, ES, IT). Сохраняет выбор пользователя в `localStorage` (без установки cookie на сервере). Положение баннера настраивается параметром `&position` (left, right, center).
+- **Связь с ядром:** Работает в паре с GDPR-патчем в `index.php` (отложенный старт сессии).
 - **Документация:** `docs/libs/cookieConsent.md`.
 ---
 

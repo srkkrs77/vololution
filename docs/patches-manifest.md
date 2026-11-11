@@ -559,6 +559,11 @@ WHERE setting_name = 'cache_type';
 
 ### СВОИ РАЗРАБОТКИ
 
-- **Сниппет `cookieConsent`:** `assets/snippets/cookieConsent/snippet.cookieConsent.php` (v1.1.0). Дескриптор: `install/assets/snippets/cookieConsent.tpl`.
+- **Сниппет `cookieConsent` (v2.0.1):** `assets/snippets/cookieConsent/snippet.cookieConsent.php`. Архитектура разделена на 4 части: сам сниппет (логика) и 3 чанка (HTML, CSS, JS).
+- **Чанки `cookieConsent`:**
+  - `cookieConsent.tpl` — HTML-разметка.
+  - `cookieConsent.css` — стили.
+  - `cookieConsent.js` — скрипт.
+- **Дескрипторы установщика:** `install/assets/snippets/cookieConsent.tpl` и `install/assets/chunks/cookieConsent.tpl`, `cookieConsent.css.tpl`, `cookieConsent.js.tpl`.
 - **Чанк `mm_rules.tpl`:** `install/assets/chunks/mm_rules.tpl` (v2.1.0). Добавлен индикатор длины `seo_description`.
 - **Пакет `seoVolo`:** фиксы `html_entity_decode` (Разделы 8, 10, 11, 15) и приоритет `og_default_image`.

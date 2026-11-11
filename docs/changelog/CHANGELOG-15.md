@@ -11,10 +11,14 @@ CHANGELOG-15.md — Раздел 21–23
 **Решение:** Сессия стартует только для админки или авторизованных пользователей.
 **Код:** Добавлена проверка `$isManagerRequest` и `$hasEvoCookie` перед `startCMSSession()`.
 
-### 21.2 Сниппет `cookieConsent`
-**Создан:** `assets/snippets/cookieConsent/snippet.cookieConsent.php` (v1.1.0).
-**Функционал:** Мультиязычный (RU, EN, DE, FR, ES, IT) GDPR-баннер с сохранением в `localStorage`.
-**Дескриптор:** `install/assets/snippets/cookieConsent.tpl`.
+### 21.2 Сниппет cookieConsent (v2.0.1)
+**Создан:** архитектура из 4 частей для удобной кастомизации.
+- **Сниппет:** `assets/snippets/cookieConsent/snippet.cookieConsent.php` (логика и определение языка).
+- **Чанк `cookieConsent.tpl`:** HTML-разметка.
+- **Чанк `cookieConsent.css`:** Стили (с комментариями и классами позиционирования).
+- **Чанк `cookieConsent.js`:** Логика сохранения в `localStorage`.
+- **Дескрипторы для установщика:** `install/assets/snippets/cookieConsent.tpl` и 3 файла в `install/assets/chunks/` (`cookieConsent.tpl`, `cookieConsent.css.tpl`, `cookieConsent.js.tpl`).
+- **Документация:** `docs/libs/cookieConsent.md`.
 
 ---
 
