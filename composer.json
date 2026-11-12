@@ -1,7 +1,6 @@
-/*
 {
-    "name": "evolutioncms/evolution",
-    "description": "Evolution CMS is a Content Management System, ex MODX Evolution",
+    "name": "vololution",
+    "description": "VoloLution CMS - Fork of Evolution CMS",
     "type": "project",
     "keywords": [
         "content",
@@ -9,22 +8,26 @@
         "routing",
         "templating"
     ],
-    "homepage": "https://evo-cms.com/",
+    "homepage": "https://github.com/srkkrs77/vololution",
     "license": "GPL-3.0+",
     "support": {
         "telegram": "https://t.me/evo_cms",
-        "issues": "https://github.com/evocms-community/evolution/issues/",
-        "source": "https://github.com/evocms-community/evolution/"
+        "issues": "https://github.com/srkkrs77/vololution/issues/",
+        "source": "https://github.com/srkkrs77/vololution/"
     },
     "config": {
         "vendor-dir": "vendor"
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.3",
         "ext-json": "*",
         "phpoffice/phpspreadsheet": "^5.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vololution\\": "src/"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
-*/
