@@ -115,7 +115,7 @@ git merge merge/upstream-YYYY-MM
 
 ---
 
-## ПАКЕТЫ С ПРАВКАМИ — 8 ПАКЕТОВ
+## ПАКЕТЫ С ПРАВКАМИ — 9 ПАКЕТОВ
 
 ### MultiTV
 - `assets/tvs/multitv/includes/multitv.class.php` — 10 правок `??`
@@ -163,20 +163,26 @@ git merge merge/upstream-YYYY-MM
 - **Причина:** PHP 8.4+ бросает `ValueError` при пустой строке в `idn_to_ascii()`
 - **CHANGELOG:** 4.8
 
+### SimpleGallery (12.11.2026)
+- `assets/plugins/simplegallery/lib/plugin.class.php` — метод `createTable()`:
+  - `ENGINE=MyISAM` → `ENGINE=InnoDB DEFAULT CHARSET=utf8`
+  - Убраны `NOT NULL` у `TEXT` и `datetime` (совместимость с MySQL 8+ strict mode)
+- `packages/SimpleGallery.zip` — обновлён (12.11.2026)
+- **CHANGELOG:** 4.9
+
 ---
 
-## ПАКЕТЫ БЕЗ ПРАВОК — 8 ПАКЕТОВ
+## ПАКЕТЫ БЕЗ ПРАВОК — 7 ПАКЕТОВ
 
 | # | Пакет | Тип | CHANGELOG |
 |---|---|---|---|
 | 1 | DocLister | сниппет | 5 |
-| 2 | SimpleGallery | плагин | 5 |
-| 3 | EvoBabel | плагин | 5 |
-| 4 | evoFileManagerDialog | плагин | 5 |
-| 5 | FirstChildRedirect | сниппет | 5 |
-| 6 | MonthDate | сниппет | 5 |
-| 7 | DLSiblings | сниппет | 5 |
-| 8 | phpThumb | библиотека | — |
+| 2 | EvoBabel | плагин | 5 |
+| 3 | evoFileManagerDialog | плагин | 5 |
+| 4 | FirstChildRedirect | сниппет | 5 |
+| 5 | MonthDate | сниппет | 5 |
+| 6 | DLSiblings | сниппет | 5 |
+| 7 | phpThumb | библиотека | — |
 
 **FormLister (13.10.2026):** переведён из «без правок» в «с правками» — PHP 8.4+ падал на пустом email.
 

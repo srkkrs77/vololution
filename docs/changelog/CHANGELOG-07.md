@@ -427,7 +427,7 @@ switch ($e->name) {
 
 ---
 
-### 4.8. Сводная таблица патченных пакетов (обновлено 11.10.2026)
+### 4.8. Сводная таблица патченных пакетов (обновлено 12.11.2026)
 
 | # | Пакет | Файлов | Правок | CHANGELOG |
 |---|---|---|---|---|
@@ -438,4 +438,24 @@ switch ($e->name) {
 | 5 | **editDocs** | 2 | 21 | 4.5 |
 | 6 | **MultiCategories** | 1 | 2 | 4.6 |
 | 7 | **WebP Converter** | 2 | 5 | 4.7 |
-| **Всего** | **7 пакетов** | **12 файлов** | **53 правки** | — |
+| 8 | **FormLister** | 1 | 1 | 4.8 |
+| 9 | **SimpleGallery** | 1 | 1 | 4.9 |
+| **Всего** | **9 пакетов** | **14 файлов** | **55 правок** | — |
+
+---
+
+### 4.9 SimpleGallery — патч установщика (12.11.2026)
+
+**Автор:** Pathologic  
+**CHANGELOG:** 4.9  
+**Причина правок:** MySQL 8+ (strict mode). Установщик не создавал таблицу `sg_images` из-за `ENGINE=MyISAM` и `NOT NULL` у `TEXT`/`datetime`. MySQL отклонял запрос, установщик молчал.
+
+**Файл:**
+- `assets/plugins/simplegallery/lib/plugin.class.php` — метод `createTable()`:
+  - `ENGINE=MyISAM` заменён на `ENGINE=InnoDB DEFAULT CHARSET=utf8`.
+  - Убраны `NOT NULL` у полей `sg_image`, `sg_description`, `sg_properties`, `sg_add` (тип TEXT) и `sg_createdon` (тип datetime).
+
+**ZIP:** `packages/SimpleGallery.zip` обновлён (12.11.2026).  
+**При установке через Store:** ZIP `SimpleGallery.zip`, alias `SimpleGallery`, категория «Плагины».
+
+**Конец части 7.**
