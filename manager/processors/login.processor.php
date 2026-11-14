@@ -227,6 +227,11 @@ $_SESSION['mgrShortname'] = $username;
 $_SESSION['mgrFullname'] = $fullname;
 $_SESSION['mgrEmail'] = $email;
 $_SESSION['mgrValidated'] = 1;
+// Очистка старых CSRF-токенов при успешном входе
+// Clear old CSRF tokens on successful login
+if (function_exists('clearCsrfTokens')) {
+    clearCsrfTokens();
+}
 $_SESSION['mgrInternalKey'] = $internalKey;
 $_SESSION['mgrFailedlogins'] = $failedlogins;
 $_SESSION['mgrLastlogin'] = $lastlogin;

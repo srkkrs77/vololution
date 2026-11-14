@@ -113,6 +113,16 @@ git merge merge/upstream-YYYY-MM
 - **Внимание:** это пакет CE
 - **CHANGELOG:** 2.7
 
+### 14. `manager/processors/login.processor.php`
+- **Правка:** Очистка CSRF-токенов (`clearCsrfTokens()`) после `$_SESSION['mgrValidated'] = 1;`
+- **Причина:** Ротация токенов при входе (Задача A)
+- **CHANGELOG:** 3.6
+
+### 15. `manager/processors/logout.processor.php`
+- **Правка:** Очистка CSRF-токенов и удаление cookie `modx_remember_manager` перед `@session_destroy();`
+- **Причина:** Ротация токенов при выходе + чистый логаут (Задача A)
+- **CHANGELOG:** 3.6
+
 ---
 
 ## ПАКЕТЫ С ПРАВКАМИ — 9 ПАКЕТОВ
@@ -554,7 +564,8 @@ WHERE setting_name = 'cache_type';
 
 ### 14. `index.php` (корень сайта)
 - **Правка:** Отложенный запуск `startCMSSession()`. Сессия стартует только для запросов из `/manager/` (включая Referer) или если уже есть Evo-куки (`evo*`, `PHPSESSID`).
-- **Причина:** GDPR / TTDSG (запрет установки cookie до согласия) + совместимость с `evoBabelLexicon`.
+- **Исправление 14.11.2026:** Устранена логическая ошибка с константой `NO_SESSION`. Теперь проверка объединена в один блок `if...else` в конце файла.
+- **Причина:** GDPR / TTDSG (запрет установки cookie до согласия) + корректная работа админ-сессии на фронтенде.
 - **CHANGELOG:** 21.1
 
 ### УСТАНОВЩИК (Папка `install/`) — ФИКСЫ PHP 8.4

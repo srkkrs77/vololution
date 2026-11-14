@@ -122,6 +122,20 @@ manager/includes/config.inc.php — рабочий файл (в .gitignore, не
 
 install/config.inc.tpl — шаблон, из которого создаётся config.inc.php при установке. Коммитится.
 
-text
+---
+
+### 3.6. Ротация CSRF-токенов и удаление cookie при login/logout (Задача A) — ✅ 14.11.2026
+
+**Файлы:**
+- `manager/processors/login.processor.php` — очистка токенов после `$_SESSION['mgrValidated'] = 1;`.
+- `manager/processors/logout.processor.php` — очистка токенов и удаление cookie `modx_remember_manager` перед `@session_destroy();`.
+
+**Код:**
+```php
+if (function_exists('clearCsrfTokens')) {
+    clearCsrfTokens();
+}
+
+Причина: При смене статуса пользователя старые токены должны сбрасываться (защита от Session Fixation). Также при выходе удаляется cookie «Запомнить меня», чтобы браузер не хранил логин администратора.
 
 **Конец части 4.**

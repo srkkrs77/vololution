@@ -1,172 +1,168 @@
-<?php
-
-/*
-*************************************************************************
-    Evolution CMS Content Management System and PHP Application Framework ("EVO")
-	Managed and maintained by the EVO community
-*************************************************************************
-	EVO is an opensource PHP/MySQL content management system and content
-	management framework that is flexible, adaptable, supports XHTML/CSS
-	layouts, and works with most web browsers.
-
-	EVO is distributed under the GNU General Public License
-*************************************************************************
-
-	This file and all related or dependant files distributed with this file
-	are considered as a whole to make up EVO.
-
-	EVO is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	EVO is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with EVO (located in "/assets/docs/"); if not, write to the Free Software
-	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1335, USA
-
-	For more information on EVO please visit https://evo-cms.com/
-	Github: https://github.com/evocms-community/evolution/
-
-**************************************************************************
-	Based on MODX Evolution CMS and Application Framework
-	Copyright 2005 and forever thereafter by Raymond Irving & Ryan Thrash.
-	All rights reserved.
-
-	MODX Evolution is originally based on Etomite by Alex Butter
-**************************************************************************
-*/
-
-/**
- * Initialize Document Parsing
- * -----------------------------
- */
-
-$autoloader = __DIR__ . '/assets/vendor/autoload.php';
-if (file_exists($autoloader) && is_readable($autoloader)) {
-	include_once($autoloader);
-} else {
-	$autoloader = __DIR__ . '/vendor/autoload.php';
-	if (file_exists($autoloader) && is_readable($autoloader)) {
-		include_once($autoloader);
-	}
-}
-
-if (
-    strpos($_SERVER['REQUEST_URI'], '/manager/') === false && 
-    strpos($_SERVER['REQUEST_URI'], '/install/') === false
-) {
-    define('NO_SESSION', true);
-}
-
-if(!isset($_SERVER['REQUEST_TIME_FLOAT'])) $_SERVER['REQUEST_TIME_FLOAT'] = microtime(true);
-
-$base_path = str_replace('\\','/',dirname(__FILE__)) . '/';
-if(is_file($base_path . 'assets/cache/siteManager.php'))
-    include_once($base_path . 'assets/cache/siteManager.php');
-if(!defined('MGR_DIR') && is_dir("{$base_path}manager"))
-	define('MGR_DIR', 'manager');
-if(is_file($base_path . 'assets/cache/siteHostnames.php'))
-    include_once($base_path . 'assets/cache/siteHostnames.php');
-if(!defined('MODX_SITE_HOSTNAMES'))
-	define('MODX_SITE_HOSTNAMES', '');
-
-// get start time
-$mstart = memory_get_usage();
-
-// harden it
-require_once(dirname(__FILE__).'/'.MGR_DIR.'/includes/protect.inc.php');
-
-// set some settings, and address some IE issues
-@ini_set('url_rewriter.tags', '');
-@ini_set('session.use_trans_sid', 0);
-@ini_set('session.use_only_cookies',1);
-session_cache_limiter('');
-header('P3P: CP="NOI NID ADMa OUR IND UNI COM NAV"'); // header for weird cookie stuff. Blame IE.
-header('Cache-Control: private, must-revalidate');
-ob_start();
-
-/**
- *	Filename: index.php
- *	Function: This file loads and executes the parser. *
- */
-
-define('IN_PARSER_MODE', true);
-if ( ! defined('IN_MANAGER_MODE')) {
-	define('IN_MANAGER_MODE', false);
-}
-if (!defined('MODX_API_MODE')) {
-    define('MODX_API_MODE', false);
-}
-
-// get the required includes
-if(!isset($database_user) || $database_user=="") {
-	$rt = @include_once(dirname(__FILE__).'/'.MGR_DIR.'/includes/config.inc.php');
-	// Be sure config.inc.php is there and that it contains some important values
-	if(!$rt || !$database_type || !$database_server || !$database_user || !$dbase) {
-		header("HTTP/1.1 302 Moved Temporarily");
-		header("Location: /install");
-		exit;
-	}
-}
-
-// start session
-$uri = $_SERVER['REQUEST_URI'];
-$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-
-// Проверяем, пришел ли запрос из админки (включая AJAX)
-$isManagerRequest = (strpos($uri, '/manager/') !== false) || (strpos($referer, '/manager/') !== false);
-
-// Проверяем, есть ли вообще куки, связанные с Evolution (авторизация)
-$hasEvoCookie = false;
-foreach ($_COOKIE as $key => $val) {
-    if (strpos($key, 'evo') === 0 || $key === 'PHPSESSID') {
-        $hasEvoCookie = true;
-        break;
-    }
-}
-
-// Запускаем сессию только если это админ или авторизованный пользователь
-if ($isManagerRequest || $hasEvoCookie) {
-    startCMSSession();
-}
-
-// initiate a new document parser
-if (isset($coreClass) && class_exists($coreClass)) {
-	$modx = new $coreClass;
-}
-if (!isset($modx) || !($modx instanceof \DocumentParser)) {
-	include_once(MODX_MANAGER_PATH.'includes/document.parser.class.inc.php');
-	$modx = DocumentParser::getInstance();
-}
-
-// set some parser options
-$modx->minParserPasses = 1; // min number of parser recursive loops or passes
-$modx->maxParserPasses = 10; // max number of parser recursive loops or passes
-$modx->dumpSQL = false;
-$modx->dumpSnippets = false; // feed the parser the execution start time
-$modx->dumpPlugins = false;
-$modx->tstart = $_SERVER['REQUEST_TIME_FLOAT'];
-$modx->mstart = $mstart;
-
-// Debugging mode:
-$modx->stopOnNotice = false;
-
-// Don't show PHP errors to the public
-if(!isset($_SESSION['mgrValidated']) || !$_SESSION['mgrValidated']) {
-    @ini_set("display_errors","0");
-}
-
-if(MODX_CLI){
-    @set_time_limit(0);
-    @ini_set('max_execution_time',0);
-}
-
-// execute the parser if index.php was not included
-if (!MODX_API_MODE && !MODX_CLI) {
-    $modx->executeParser();
-}
+<?php
+
+/*
+*************************************************************************
+    Evolution CMS Content Management System and PHP Application Framework ("EVO")
+	Managed and maintained by the EVO community
+*************************************************************************
+	EVO is an opensource PHP/MySQL content management system and content
+	management framework that is flexible, adaptable, supports XHTML/CSS
+	layouts, and works with most web browsers.
+
+	EVO is distributed under the GNU General Public License
+*************************************************************************
+
+	This file and all related or dependant files distributed with this file
+	are considered as a whole to make up EVO.
+
+	EVO is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	EVO is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with EVO (located in "/assets/docs/"); if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1335, USA
+
+	For more information on EVO please visit https://evo-cms.com/
+	Github: https://github.com/evocms-community/evolution/
+
+**************************************************************************
+	Based on MODX Evolution CMS and Application Framework
+	Copyright 2005 and forever thereafter by Raymond Irving & Ryan Thrash.
+	All rights reserved.
+
+	MODX Evolution is originally based on Etomite by Alex Butter
+**************************************************************************
+*/
+
+/**
+ * Initialize Document Parsing
+ * -----------------------------
+ */
+
+$autoloader = __DIR__ . '/assets/vendor/autoload.php';
+if (file_exists($autoloader) && is_readable($autoloader)) {
+	include_once($autoloader);
+} else {
+	$autoloader = __DIR__ . '/vendor/autoload.php';
+	if (file_exists($autoloader) && is_readable($autoloader)) {
+		include_once($autoloader);
+	}
+}
+
+if(!isset($_SERVER['REQUEST_TIME_FLOAT'])) $_SERVER['REQUEST_TIME_FLOAT'] = microtime(true);
+
+$base_path = str_replace('\\','/',dirname(__FILE__)) . '/';
+if(is_file($base_path . 'assets/cache/siteManager.php'))
+    include_once($base_path . 'assets/cache/siteManager.php');
+if(!defined('MGR_DIR') && is_dir("{$base_path}manager"))
+	define('MGR_DIR', 'manager');
+if(is_file($base_path . 'assets/cache/siteHostnames.php'))
+    include_once($base_path . 'assets/cache/siteHostnames.php');
+if(!defined('MODX_SITE_HOSTNAMES'))
+	define('MODX_SITE_HOSTNAMES', '');
+
+// get start time
+$mstart = memory_get_usage();
+
+// harden it
+require_once(dirname(__FILE__).'/'.MGR_DIR.'/includes/protect.inc.php');
+
+// set some settings, and address some IE issues
+@ini_set('url_rewriter.tags', '');
+@ini_set('session.use_trans_sid', 0);
+@ini_set('session.use_only_cookies',1);
+session_cache_limiter('');
+header('P3P: CP="NOI NID ADMa OUR IND UNI COM NAV"'); // header for weird cookie stuff. Blame IE.
+header('Cache-Control: private, must-revalidate');
+ob_start();
+
+/**
+ *	Filename: index.php
+ *	Function: This file loads and executes the parser. *
+ */
+
+define('IN_PARSER_MODE', true);
+if ( ! defined('IN_MANAGER_MODE')) {
+	define('IN_MANAGER_MODE', false);
+}
+if (!defined('MODX_API_MODE')) {
+    define('MODX_API_MODE', false);
+}
+
+// get the required includes
+if(!isset($database_user) || $database_user=="") {
+	$rt = @include_once(dirname(__FILE__).'/'.MGR_DIR.'/includes/config.inc.php');
+	// Be sure config.inc.php is there and that it contains some important values
+	if(!$rt || !$database_type || !$database_server || !$database_user || !$dbase) {
+		header("HTTP/1.1 302 Moved Temporarily");
+		header("Location: /install");
+		exit;
+	}
+}
+
+// start session
+$uri = $_SERVER['REQUEST_URI'];
+$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+
+// Проверяем, пришел ли запрос из админки (включая AJAX)
+$isManagerRequest = (strpos($uri, '/manager/') !== false) || (strpos($referer, '/manager/') !== false);
+
+// Проверяем, есть ли вообще куки, связанные с Evolution (авторизация)
+$hasEvoCookie = false;
+foreach ($_COOKIE as $key => $val) {
+    if (strpos($key, 'evo') === 0 || $key === 'PHPSESSID') {
+        $hasEvoCookie = true;
+        break;
+    }
+}
+
+// Запускаем сессию ТОЛЬКО если это админ/установщик или авторизованный пользователь.
+// Иначе ставим NO_SESSION, чтобы Evo не ставила куки до согласия (GDPR).
+if ($isManagerRequest || $hasEvoCookie) {
+    startCMSSession();
+} else {
+    define('NO_SESSION', true);
+}
+
+// initiate a new document parser
+if (isset($coreClass) && class_exists($coreClass)) {
+	$modx = new $coreClass;
+}
+if (!isset($modx) || !($modx instanceof \DocumentParser)) {
+	include_once(MODX_MANAGER_PATH.'includes/document.parser.class.inc.php');
+	$modx = DocumentParser::getInstance();
+}
+
+// set some parser options
+$modx->minParserPasses = 1; // min number of parser recursive loops or passes
+$modx->maxParserPasses = 10; // max number of parser recursive loops or passes
+$modx->dumpSQL = false;
+$modx->dumpSnippets = false; // feed the parser the execution start time
+$modx->dumpPlugins = false;
+$modx->tstart = $_SERVER['REQUEST_TIME_FLOAT'];
+$modx->mstart = $mstart;
+
+// Debugging mode:
+$modx->stopOnNotice = false;
+
+// Don't show PHP errors to the public
+if(!isset($_SESSION['mgrValidated']) || !$_SESSION['mgrValidated']) {
+    @ini_set("display_errors","0");
+}
+
+if(MODX_CLI){
+    @set_time_limit(0);
+    @ini_set('max_execution_time',0);
+}
+
+// execute the parser if index.php was not included
+if (!MODX_API_MODE && !MODX_CLI) {
+    $modx->executeParser();
+}

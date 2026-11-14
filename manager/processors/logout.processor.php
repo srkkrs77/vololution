@@ -16,10 +16,23 @@ $modx->invokeEvent("OnBeforeManagerLogout",
 
 //// Unset all of the session variables.
 //$_SESSION = array();
-// destroy session cookie
+//// destroy session cookie
 if (isset($_COOKIE[session_name()])) {
     setcookie(session_name(), '', 0, MODX_BASE_URL);
 }
+
+// Очистка CSRF-токенов при выходе
+// Clear CSRF tokens on logout
+if (function_exists('clearCsrfTokens')) {
+    clearCsrfTokens();
+}
+
+// Удаление куки "Запомнить меня"
+// Remove "Remember me" cookie
+if (isset($_COOKIE['modx_remember_manager'])) {
+    setcookie('modx_remember_manager', '', time() - 3600, MODX_BASE_URL);
+}
+
 //// now destroy the session
 @session_destroy(); // this sometimes generate an error in iis
 //$sessionID = md5(date('d-m-Y H:i:s'));
