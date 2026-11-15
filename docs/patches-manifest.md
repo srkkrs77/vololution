@@ -76,7 +76,8 @@ git merge merge/upstream-YYYY-MM
 ### 7. `install/config.inc.tpl`
 - **Правка A:** CSRF-функции (`generateCsrfToken`, `getCurrentCsrfToken`, `getRequestCsrfToken`, `validateCsrfToken`, `checkCsrfToken`, `clearCsrfTokens`, `csrfTokenField`, `csrfTokenMeta`)
 - **Правка B:** `!empty($modx->config['debug'])` в `checkCsrfToken()`
-- **CHANGELOG:** 3.2, 3.5
+- **Правка C:** Проверка Origin / Referer в `checkCsrfToken()` (Задача B, 15.11.2026)
+- **CHANGELOG:** 3.2, 3.5, 3.7
 
 ### 8. `manager/includes/config.inc.php`
 - **Правка:** `!empty($modx->config['debug'])` в `checkCsrfToken()`

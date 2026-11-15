@@ -67,13 +67,11 @@ Whitelist (действия, не требующие токена):
 
 CHANGELOG: раздел 19.
 
-### 5.4. Осталось по CSRF
-A. Ротация токенов на login/logout (4 точки) — ⬜
+### 5.4. Статус задач CSRF
 
-B. Origin / Referer check в checkCsrfToken() — ⬜
-
-C. Защита connector'ов модулей (Store, MultiTV, evoSearch, editDocs) — ⬜
-
-Подробно — CHANGELOG.md, раздел 9.1.
+- **Задача A (Ротация токенов при login/logout)** — ✅ **ВЫПОЛНЕНО 14.11.2026** (файлы `login.processor.php`, `logout.processor.php`, очистка токенов + удаление cookie «Запомнить меня»).
+- **Задача B (Проверка Origin / Referer)** — ✅ **ВЫПОЛНЕНО 15.11.2026** (файл `install/config.inc.tpl`, блокировка запросов с чужих доменов).
+- **Задача C (Защита connector'ов модулей)** — ⬜ В планах.
+- **Задача D (Убрать дублирование JS в header.inc.php)** — ✅ **ВЫПОЛНЕНО 11.10.2026**.
 
 Конец части 5.

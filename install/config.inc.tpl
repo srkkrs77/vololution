@@ -210,6 +210,25 @@ if (!function_exists('generateCsrfToken')) {
             ? $GLOBALS['modx']->getLoginUserID()
             : 'not logged in';
 
+        // Проверка Origin / Referer (Задача B)
+        // Origin / Referer check (Task B)
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        if ($origin !== '') {
+            $siteUrl = defined('MODX_SITE_URL') ? MODX_SITE_URL : '';
+            // Убираем слеш в конце для корректного сравнения
+            // Remove trailing slash for correct comparison
+            $siteUrlCheck = rtrim($siteUrl, '/');
+            
+            if ($siteUrlCheck && strpos($origin, $siteUrlCheck) !== 0) {
+                if (isset($GLOBALS['modx']) && method_exists($GLOBALS['modx'], 'logEvent')) {
+                    $GLOBALS['modx']->logEvent(0, 3, 'CSRF origin mismatch: ' . $origin, 'CSRF Origin Failed');
+                }
+                header('HTTP/1.1 403 Forbidden');
+                header('Content-Type: text/plain; charset=UTF-8');
+                exit('Invalid origin.');
+            }
+        }
+
         $logMsg = 'CSRF token validation failed'
             . ' | action: ' . $action
             . ' | method: ' . ($_SERVER['REQUEST_METHOD'] ?? 'unknown')
