@@ -12,7 +12,9 @@ if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
 // Increase script execution time so the server doesn't kill the backup
 set_time_limit(0);
 
-require_once(MODX_BASE_PATH . 'vendor/autoload.php');
+// Подключаем класс напрямую (автономно, без Composer)
+// Include class directly (standalone, without Composer)
+require_once(__DIR__ . '/Manager.php');
 
 // Загружаем язык админки
 // Load manager language
@@ -26,9 +28,12 @@ if (file_exists($langFile)) {
     include_once __DIR__ . '/lang/english.php'; // Fallback
 }
 
-use Vololution\Backup\Manager;
-
+// Создаем экземпляр менеджера, передавая ему конфиг Evo
+// Create manager instance passing Evo config
 $config = $modx->config;
+
+// В Evo имя базы иногда не попадает в $modx->config, поэтому берем его из глобальной переменной
+// In Evo the database name sometimes doesn't get into $modx->config, so we take it from the global variable
 if (empty($config['dbase'])) {
     $config['dbase'] = $GLOBALS['dbase'] ?? $modx->db->config['dbase'] ?? '';
 }
