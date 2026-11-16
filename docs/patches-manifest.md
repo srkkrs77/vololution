@@ -585,3 +585,17 @@ WHERE setting_name = 'cache_type';
 - **Дескрипторы установщика:** `install/assets/snippets/cookieConsent.tpl` и `install/assets/chunks/cookieConsent.tpl`, `cookieConsent.css.tpl`, `cookieConsent.js.tpl`.
 - **Чанк `mm_rules.tpl`:** `install/assets/chunks/mm_rules.tpl` (v2.1.0). Добавлен индикатор длины `seo_description`.
 - **Пакет `seoVolo`:** фиксы `html_entity_decode` (Разделы 8, 10, 11, 15) и приоритет `og_default_image`.
+
+---
+
+## СВОИ РАЗРАБОТКИ (src/)
+
+Этот код написан нами с нуля на современном PHP (PSR-4, PDO) и не зависит от апстрима CE.
+
+### Модуль Бэкапов (VoloLution Backup)
+- **Логика:** `src/Backup/Manager.php` (PDO + ZipArchive).
+- **Точка входа:** `assets/modules/backup/index.php`.
+- **Языки:** `assets/modules/backup/lang/` (ru, en).
+- **Дескриптор:** `install/assets/modules/backup.tpl`.
+- **Пакет:** `packages/voloBackup.zip`.
+- **CHANGELOG:** 24.
