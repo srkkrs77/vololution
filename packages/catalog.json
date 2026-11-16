@@ -230,6 +230,19 @@
       "patched": false,
       "status": "unchecked",
       "name_in_modx": "phpthumb"
+    },
+	{
+      "name": "VoloLution Backup",
+      "alias": "voloBackup",
+      "version": "1.0.0",
+      "category": "modules",
+      "description": {
+        "ru": "Резервное копирование базы данных и файлов сайта",
+        "en": "Database and site files backup"
+      },
+      "author": "VoloLution",
+      "file": "voloBackup.zip",
+      "patched": true
     }
   ]
 }
