@@ -119,10 +119,24 @@ default:
 	if ($modx->config['manager_theme_mode'] == 4 ){
 		$Store->lang['body_class_name'] = 'darkness';
 	}
-	$tpl = Store::parse( $Store->tpl(dirname( __FILE__ ).'/template/main.html') ,$modx->config ) ;
-	$tpl = Store::parse( $tpl ,$Store->lang ) ;
-	echo $tpl;
-	break;
+    $tpl = Store::parse( $Store->tpl(dirname( __FILE__ ).'/template/main.html') ,$modx->config ) ;
+    $tpl = Store::parse( $tpl ,$Store->lang ) ;
+    
+    // Генерируем токен и принудительно сохраняем сессию до вывода HTML
+    // Generate token and force save session before outputting HTML
+    $csrfToken = getCurrentCsrfToken();
+    $sessionId = session_id();
+    $sessionName = session_name();
+    session_write_close(); // <--- ЭТО РЕШАЕТ ПРОБЛЕМУ
+
+    $tpl = Store::parse( $tpl, [
+        'csrf_token' => $csrfToken,
+        'session_id' => $sessionId,
+        'session_name' => $sessionName
+    ] );
+    
+    echo $tpl;
+    break;
 }
 
 

@@ -34,6 +34,19 @@ store = {
         param = {
             lang: $('[name="language"]').val()
         };
+        
+        // Берем CSRF-токен и ID сессии из глобальных переменных
+        // Take CSRF token and session ID from global variables
+        if (typeof window.STORE_CSRF_TOKEN !== 'undefined') {
+            param.csrf_token = window.STORE_CSRF_TOKEN;
+        }
+        if (typeof window.STORE_SESSION_ID !== 'undefined') {
+            param.session_id = window.STORE_SESSION_ID;
+        }
+        if (typeof window.STORE_SESSION_NAME !== 'undefined') {
+            param.session_name = window.STORE_SESSION_NAME;
+        }
+        
         return $.extend(obj1, param);
     },
 
