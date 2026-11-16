@@ -1,47 +1,26 @@
 <?php
-
-declare(strict_types=1);
-
-use PDO;
-use PDOException;
-use Exception;
-use ZipArchive;
-
-/**
- * Менеджер резервного копирования.
- * Backup Manager.
- */
 class Manager
 {
-    private string $dbHost;
-    private string $dbUser;
-    private string $dbPass;
-    private string $dbName;
-    private string $dbPort;
+    private $modx;
 
-    public function __construct(array $config)
+    public function __construct($modx)
     {
-        $this->dbName = trim($config['dbase'] ?? '', '`');
-        
-        $hostParts = explode(':', $config['database_server'] ?? 'localhost');
-        $this->dbHost = $hostParts[0];
-        $this->dbPort = $hostParts[1] ?? '3306';
-
-        $this->dbUser = $config['database_user'] ?? 'root';
-        $this->dbPass = $config['database_password'] ?? '';
+        $this->modx = $modx;
     }
 
     public function createBackup(bool $includeDb = true, bool $includeFiles = true): string
     {
-        $zipPath = MODX_BASE_PATH . 'assets/cache/backup_' . date('Ymd_His') . '.zip';
-        
-        if (!is_dir(dirname($zipPath))) {
-            mkdir(dirname($zipPath), 0777, true);
+        $backupDir = MODX_BASE_PATH . 'assets/backups/';
+        if (!is_dir($backupDir)) {
+            mkdir($backupDir, 0777, true);
         }
 
+        $filename = 'backup_' . date('Ymd_His') . '.zip';
+        $zipPath = $backupDir . $filename;
+        
         $zip = new ZipArchive();
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            throw new Exception('Не удалось создать ZIP-архив / Cannot create ZIP archive.');
+            throw new Exception('Не удалось создать ZIP-архив.');
         }
 
         if ($includeDb) {
@@ -50,12 +29,19 @@ class Manager
         }
 
         if ($includeFiles) {
+            // Отключаем базу данных на время долгой упаковки файлов, чтобы она не оборвалась
+            if (isset($this->modx->db->conn)) {
+                @$this->modx->db->conn->close();
+            }
             $this->addFolderToZip(MODX_BASE_PATH, $zip);
         }
 
         $zip->close();
 
-        return $zipPath;
+        // ПРИНУДИТЕЛЬНО ПЕРЕПОДКЛЮЧАЕМСЯ К БАЗЕ в конце, чтобы Evo смогла записать лог
+        $this->modx->db->connect();
+
+        return $filename;
     }
 
     private function addFolderToZip(string $folder, ZipArchive $zip, string $basePath = ''): void
@@ -87,48 +73,35 @@ class Manager
 
     public function backupDatabase(): string
     {
-        $dsn = "mysql:host={$this->dbHost};port={$this->dbPort};dbname={$this->dbName};charset=utf8mb4";
-        
-        try {
-            $pdo = new PDO($dsn, $this->dbUser, $this->dbPass, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ]);
-        } catch (PDOException $e) {
-            throw new Exception('Ошибка подключения к БД: ' . $e->getMessage());
-        }
-
-        $tables = [];
-        $stmt = $pdo->query('SHOW TABLES');
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $tables[] = $row[0];
-        }
-
         $sql = "-- VoloLution CMS Database Backup\n";
         $sql .= "-- Date: " . date('Y-m-d H:i:s') . "\n\n";
         $sql .= "SET FOREIGN_KEY_CHECKS=0;\n";
         $sql .= "SET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\";\n\n";
 
-        foreach ($tables as $table) {
-            $stmt = $pdo->query("SHOW CREATE TABLE `{$table}`");
-            $row = $stmt->fetch(PDO::FETCH_NUM);
+        $result = $this->modx->db->query("SHOW TABLES");
+        while ($row = $this->modx->db->getRow($result)) {
+            $table = array_values($row)[0];
+            
+            $createResult = $this->modx->db->query("SHOW CREATE TABLE `{$table}`");
+            $createRow = $this->modx->db->getRow($createResult);
             $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-            $sql .= $row[1] . ";\n\n";
+            $sql .= array_values($createRow)[1] . ";\n\n";
 
-            $stmt = $pdo->query("SELECT * FROM `{$table}`");
-            $rowCount = $stmt->rowCount();
+            $dataResult = $this->modx->db->query("SELECT * FROM `{$table}`");
+            $rowCount = $this->modx->db->getRecordCount($dataResult);
             
             if ($rowCount > 0) {
                 $sql .= "INSERT INTO `{$table}` VALUES \n";
                 $i = 0;
-                while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+                while ($row = $this->modx->db->getRow($dataResult)) {
                     $i++;
                     $values = [];
                     foreach ($row as $value) {
                         if ($value === null) {
                             $values[] = 'NULL';
                         } else {
-                            $values[] = $pdo->quote((string)$value);
+                            $escaped = $this->modx->db->escape((string)$value);
+                            $values[] = "'" . $escaped . "'";
                         }
                     }
                     $sql .= "(" . implode(', ', $values) . ")";

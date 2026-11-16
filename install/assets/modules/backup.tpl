@@ -2,13 +2,12 @@
 /**
  * VoloLution Backup
  *
- * Database backup module for VoloLution CMS
+ * Backup module for VoloLution CMS.
  *
- * @category    module
- * @version     1.0.0
- * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
- * @internal    @modx_category Manager and Admin
- * @internal    @properties &full_backup=Full Backup;list;No,Yes;Yes
+ * @category	module
+ * @version 	1.0.0
+ * @internal	@modx_category Manager and Admin
+ * @internal	@disabled 0
  * @internal    @installset base
  */
 
