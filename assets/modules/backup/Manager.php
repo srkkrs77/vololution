@@ -19,12 +19,6 @@ class Manager
     private string $dbName;
     private string $dbPort;
 
-    /**
-     * Конструктор принимает настройки БД.
-     * Constructor accepts DB settings.
-     *
-     * @param array $config Массив с настройками (из $modx->config)
-     */
     public function __construct(array $config)
     {
         $this->dbName = trim($config['dbase'] ?? '', '`');
@@ -37,15 +31,6 @@ class Manager
         $this->dbPass = $config['database_password'] ?? '';
     }
 
-    /**
-     * Создает полный бэкап (БД + Файлы или по отдельности) и возвращает путь к ZIP.
-     * Creates a full backup (DB + Files or separately) and returns path to ZIP.
-     *
-     * @param bool $includeDb Включить ли базу данных
-     * @param bool $includeFiles Включить ли файлы
-     * @return string Путь к созданному ZIP-файлу
-     * @throws Exception
-     */
     public function createBackup(bool $includeDb = true, bool $includeFiles = true): string
     {
         $zipPath = MODX_BASE_PATH . 'assets/cache/backup_' . date('Ymd_His') . '.zip';
@@ -73,10 +58,6 @@ class Manager
         return $zipPath;
     }
 
-    /**
-     * Рекурсивно добавляет папку в ZIP, игнорируя кэш и системные папки.
-     * Recursively adds folder to ZIP, ignoring cache and system folders.
-     */
     private function addFolderToZip(string $folder, ZipArchive $zip, string $basePath = ''): void
     {
         $realPath = rtrim($folder, '/\\') . DIRECTORY_SEPARATOR;
@@ -104,13 +85,6 @@ class Manager
         }
     }
 
-    /**
-     * Создает SQL-дамп базы данных.
-     * Creates a database SQL dump.
-     *
-     * @return string SQL-код дампа / SQL dump string
-     * @throws Exception
-     */
     public function backupDatabase(): string
     {
         $dsn = "mysql:host={$this->dbHost};port={$this->dbPort};dbname={$this->dbName};charset=utf8mb4";
