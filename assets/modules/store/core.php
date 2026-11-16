@@ -77,7 +77,6 @@ case 'install_file':
 		$Store->copyFolder('../assets/cache/store/tmp_install/'.$dir, '../');
 		// $Store->removeFolder('../install/'); // Отключено для VoloLution CMS (Disabled for VoloLution CMS)
 		$Store->removeFolder('../assets/cache/store/tmp_install/');
-		$Store->removeFolder('../assets/cache/store/tmp_install/');
 
 		if (isset($_GET['method']) && $_GET['method'] == 'fast'){
 			chdir('../assets/modules/store/installer/');
@@ -123,23 +122,9 @@ default:
     $tpl = Store::parse( $Store->tpl(dirname( __FILE__ ).'/template/main.html') ,$modx->config ) ;
     $tpl = Store::parse( $tpl ,$Store->lang ) ;
     
-    // Генерируем токен и принудительно сохраняем сессию до вывода HTML
-    // Generate token and force save session before outputting HTML
-    $csrfToken = getCurrentCsrfToken();
-    $sessionId = session_id();
-    $sessionName = session_name();
-    session_write_close(); // <--- ЭТО РЕШАЕТ ПРОБЛЕМУ
-
-    $tpl = Store::parse( $tpl, [
-        'csrf_token' => $csrfToken,
-        'session_id' => $sessionId,
-        'session_name' => $sessionName
-    ] );
-    
     echo $tpl;
     break;
 }
-
 
 class Store{
 	public $lang;

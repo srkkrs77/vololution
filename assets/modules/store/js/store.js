@@ -40,12 +40,6 @@ store = {
         if (typeof window.STORE_CSRF_TOKEN !== 'undefined') {
             param.csrf_token = window.STORE_CSRF_TOKEN;
         }
-        if (typeof window.STORE_SESSION_ID !== 'undefined') {
-            param.session_id = window.STORE_SESSION_ID;
-        }
-        if (typeof window.STORE_SESSION_NAME !== 'undefined') {
-            param.session_name = window.STORE_SESSION_NAME;
-        }
         
         return $.extend(obj1, param);
     },
@@ -89,10 +83,17 @@ store = {
             $('#install_file_prg').fadeIn();
             $('#install_file_btn').fadeOut();
 
+            var formData = new FormData($('#install_file_form')[0]);
+            // Добавляем токен в FormData для установки из архива
+            // Add token to FormData for archive installation
+            if (typeof window.STORE_CSRF_TOKEN !== 'undefined') {
+                formData.append('csrf_token', window.STORE_CSRF_TOKEN);
+            }
+
             $.ajax({
                 url: link() + '&method=fast',
                 type: 'POST',
-                data: new FormData($('#install_file_form')[0]),
+                data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -115,7 +116,7 @@ store = {
                 $('#install_file_form')[0].reset();
                 $('#install_file').removeAttr('disabled');
             }).fail(function(resp) {
-                $('#install_file_resp').html(file.name + '<br>' + resp);
+                $('#install_file_resp').html(file.name + '<br>' + resp.statusText);
                 $('#install_file_prg').fadeOut();
                 $('#install_file_btn').fadeIn();
                 $('#install_file').removeAttr('disabled');
@@ -127,24 +128,39 @@ store = {
     install: function(elm) {
         var el = $(elm).closest('.catalog_item').find('.informer');
         var file = $(elm).closest('.catalog_item').find('[name="link"]').val();
+        var catalogItem = $(elm).closest('.catalog_item');
 
         $('.item_list .catalog_item').addClass('blocked');
-        $(elm).closest('.catalog_item').find('.loader').show();
+        catalogItem.find('.loader').show();
+
+        // Формируем данные для отправки
+        // Prepare data for sending
+        var postData = { method: 'fast', file: file };
+        if (typeof window.STORE_CSRF_TOKEN !== 'undefined') {
+            postData.csrf_token = window.STORE_CSRF_TOKEN; // Добавляем токен (Add token)
+        }
 
         $.ajax({
             url: link() + '&method=fast&action=install&cid=' + $(elm).attr('data-id') + '&name=' + $(elm).attr('data-name'),
             type: 'POST',
-            data: { method: 'fast', file: file },
+            data: postData,
             success: function() {
-                el.closest('.catalog_item').find('.loader').hide();
+                catalogItem.find('.loader').hide();
                 el.css('display', 'block').animate({ opacity: 1 }, 500, function() {
                     el.delay(2000).animate({ opacity: 0 }, 3000, function() { el.css('display', 'none'); });
                 });
-                el.closest('.catalog_item')
+                catalogItem
                     .removeClass('item-install')
                     .addClass('item-reinstall');
-                el.closest('.catalog_item').find('.curr').hide();
+                catalogItem.find('.curr').hide();
                 $('.item_list .catalog_item').removeClass('blocked');
+            },
+            error: function(xhr) {
+                // Если сервер вернул ошибку, разблокируем интерфейс
+                // If server returns an error, unblock the UI
+                catalogItem.find('.loader').hide();
+                $('.item_list .catalog_item').removeClass('blocked');
+                alert('Ошибка установки: ' + xhr.status + ' ' + xhr.statusText);
             }
         });
     },
