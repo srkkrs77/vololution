@@ -75,7 +75,8 @@ case 'install_file':
 		$Store->removeFolder('../assets/cache/store/tmp_install/install/');
 
 		$Store->copyFolder('../assets/cache/store/tmp_install/'.$dir, '../');
-		$Store->removeFolder('../install/');
+		// $Store->removeFolder('../install/'); // Отключено для VoloLution CMS (Disabled for VoloLution CMS)
+		$Store->removeFolder('../assets/cache/store/tmp_install/');
 		$Store->removeFolder('../assets/cache/store/tmp_install/');
 
 		if (isset($_GET['method']) && $_GET['method'] == 'fast'){
