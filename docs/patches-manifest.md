@@ -368,6 +368,24 @@ WHERE setting_name = 'cache_type';
 
 ---
 
+## СВОЙ МОДУЛЬ БЭКАПОВ (VoloLution Backup)
+
+**Не зависит от ядра CE.** Автономный код, работающий на чистом PHP.
+
+### Файлы модуля (в дистрибутиве и на сайте)
+
+- `assets/modules/backup/index.php` — точка входа (интерфейс)
+- `assets/modules/backup/Manager.php` — логика бэкапа (без namespace, автономный)
+- `assets/modules/backup/download.php` — скрипт скачивания (обход .htaccess)
+- `assets/modules/backup/lang/` — языковые файлы (ru, en)
+- `install/assets/modules/backup.tpl` — дескриптор модуля (версия 1.0.0)
+- `packages/voloBackup.zip` — пакет для Store
+
+### Важно для установки на чистую Evo
+Старый установщик Evo 1.4 не умеет распаковывать архивы, где папки `assets` и `install` лежат в корне. Для чистой Evo ZIP-архив должен содержать **одну общую папку** (например, `backup`), внутри которой лежат `assets` и `install`.
+
+**CHANGELOG:** раздел 24.
+
 ## DLSitemap и DLSiblings — справочники
 
 **Не патчи.** Собственная документация.
