@@ -49,7 +49,9 @@ class Manager
         $realPath = rtrim($folder, '/\\') . DIRECTORY_SEPARATOR;
         $files = scandir($realPath);
 
-        $exclude = ['.', '..', '.git', 'vendor', 'assets/cache', 'assets/backups'];
+        // Исключаем только системный мусор, vendor оставляем!
+        // Exclude only system junk, keep vendor!
+        $exclude = ['.', '..', '.git'];
 
         foreach ($files as $file) {
             if (in_array($file, $exclude, true)) {
@@ -59,13 +61,21 @@ class Manager
             $filePath = $realPath . $file;
             $localPath = $basePath . $file;
 
+            // Нормализуем путь для кроссплатформенной проверки
+            // Normalize path for cross-platform check
+            $normalizedPath = str_replace('\\', '/', $filePath);
+
+            // Пропускаем кэш и старые бэкапы (без слэша на конце, чтобы пропустить саму папку)
+            // Skip cache and old backups (no trailing slash to skip the folder itself)
+            if (strpos($normalizedPath, '/assets/cache') !== false || 
+                strpos($normalizedPath, '/assets/backups') !== false) {
+                continue;
+            }
+
             if (is_dir($filePath)) {
                 $zip->addEmptyDir($localPath);
                 $this->addFolderToZip($filePath, $zip, $localPath . '/');
             } elseif (is_file($filePath)) {
-                if (strpos($filePath, 'assets/cache/backup_') !== false) {
-                    continue;
-                }
                 $zip->addFile($filePath, $localPath);
             }
         }
